@@ -10,9 +10,9 @@ CREATE TABLE facts (
     title TEXT NOT NULL,
     text TEXT,
     user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE NOT NULL,
-    status status,
+    status status NOT NULL,
     date_submitted TIMESTAMPTZ NOT NULL DEFAULT now(),
     date_under_review TIMESTAMPTZ NOT NULL DEFAULT now(),
-    date_approved TIMESTAMPTZ NOT NULL DEFAULT now(), 
+    date_approved TIMESTAMPTZ NOT NULL DEFAULT now(),
     date_note_true TIMESTAMPTZ NOT NULL DEFAULT now()
 );
