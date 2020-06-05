@@ -12,7 +12,7 @@ CREATE TABLE facts (
     user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE NOT NULL,
     status status NOT NULL,
     date_submitted TIMESTAMPTZ NOT NULL DEFAULT now(),
-    date_under_review TIMESTAMPTZ NOT NULL DEFAULT now(),
-    date_approved TIMESTAMPTZ NOT NULL DEFAULT now(),
-    date_note_true TIMESTAMPTZ NOT NULL DEFAULT now()
+    date_under_review TIMESTAMPTZ,
+    date_approved TIMESTAMPTZ,
+    date_note_true TIMESTAMPTZ
 );

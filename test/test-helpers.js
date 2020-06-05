@@ -24,11 +24,13 @@ function cleanTables(db) {
 function makeUsers() {
     return [
         {
+            user_id: 1,
             role: 'Admin',
             email: 'admin@gmail.com',
             password: 'password'
         }, 
         {
+            user_id: 2,
             role: 'End-User',
             email: 'end-user@gmail.com',
             password: 'password'
@@ -84,7 +86,7 @@ function seedTables(db, users, facts) {
             await trx.into(`users`).insert(preppedUsers);
             await trx.raw(
                 `SELECT setval('users_user_id_seq', ?)`,
-                [user[user.length - 1].user_id]
+                [users[users.length - 1].user_id]
             );
         }
 
