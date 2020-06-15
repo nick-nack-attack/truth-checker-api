@@ -14,5 +14,5 @@ CREATE TABLE facts (
     date_submitted TIMESTAMPTZ NOT NULL DEFAULT now(),
     date_under_review TIMESTAMPTZ,
     date_approved TIMESTAMPTZ,
-    date_note_true TIMESTAMPTZ
+    date_not_true TIMESTAMPTZ
 );

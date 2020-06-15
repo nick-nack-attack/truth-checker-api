@@ -4,12 +4,13 @@ const config = require('../config');
 
 const AuthService = {
 
-    checkAllFields(loginUser) {
+    checkAllFields(loginUser, res) {
         for (const [key, value] of Object.entries(loginUser))
-                if (value == null)
-            return res.status(400).json({
-                error: `Missing '${key}' in request body`
-            })
+            if (key !== "email" & key !== "password") {
+                return res.status(400).json({
+                    error: `Please provide ${key}`
+                })
+        }
     },
 
     comparePasswords(password, hash) {
@@ -24,9 +25,9 @@ const AuthService = {
         })
     },
 
-    getUserWithUsername(db, user_name) {
+    getUserWithEmail(db, email) {
         return db('users')
-        .where({ user_name })
+        .where({ email })
         .first()
     },
 
@@ -39,10 +40,11 @@ const AuthService = {
 
     verifyJwt(token) {
         return jwt.verify(token, config.JWT_SECRET,
-            {algorithms: ['HS256']
+            {
+                algorithms: ['HS256']
         })
     }
 
 }
 
-module.exports = AuthService
+module.exports = AuthService;

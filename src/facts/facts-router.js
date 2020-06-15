@@ -17,8 +17,11 @@ FactsRouter
         .catch(next)
     })
     .post(jsonBodyParser, (req, res, next) => {
-        const {title, text, user_id} = req.body
-        const newFact = {title, text, user_id}
+        const {title, text, user_id} = req.body;
+        const date_submitted = new Date();
+        const status = 'Pending';
+        const newFact = {title, text, user_id, status, date_submitted};
+        console.log(newFact)
 
         for (const [key,value] of Object.entries(newFact))
             if (value === null) 
@@ -41,10 +44,9 @@ FactsRouter
 
 FactsRouter
     .route('/id/:fact_id')
-    .all(checkFactExists)
+    .all(checkFactExist)
     .get((req, res, next) => {
-        res.json(res.fact)
-        .catch(next)
+        return FactsService.serializeFact(res.json(res.fact))
     })
     .delete((req, res, next) => {
         const {fact_id} = req.params;
@@ -60,42 +62,50 @@ FactsRouter
         const {title, text, status} = req.body;
         const fact = {title, text, status};
         const numOfValues = Object.values(fact).filter(Boolean).length;
-
         if(numOfValues === 0) {
-            return
+            return (
                 res.status(400).json({
                     error: {message: `Request body content requires 'title', 'text', or 'status'`}
                 })
+            )
         }
-
         FactsService.updateFact(
             req.app.get('db'),
-            req.params.fact_id
+            req.params.fact_id,
+            fact
         )
-        .then(fact => {
-            res.status(204)
-            .json(fact)
-            .end()
+        .then(fact_id => {
+            FactsService.getFactById(
+                req.app.get('db'),
+                fact_id
+            )
+            .then(fact => {
+                return res.status(201).json(fact)
+            })
         })
 
     })
 
-async function checkFactExists(req, res, next) {
+async function checkFactExist(req, res, next) {
+
     try {
         const fact = await FactsService.getFactById(
             req.app.get('db'),
             req.params.fact_id
         )
-    if(!fact)
-        return res.status(404).json({
-            error: `Fact doesn't exist`
-        })
-    res.fact = fact
-    next()
+        if(fact.length===0) {
+            return res.status(404).json({
+                error: `Fact doesn't exist`
+            })
+        } else {
+            res.fact = fact
+            next()
+        }
     }
-    catch(error) {
-        next(error)
+    catch {
+        next()
     }
+    
 }
 
     module.exports = FactsRouter;

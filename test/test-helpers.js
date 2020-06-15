@@ -18,7 +18,7 @@ function cleanTables(db) {
             ])
         )
     );
-}
+};
 
 // Create dummy users
 function makeUsers() {
@@ -36,44 +36,50 @@ function makeUsers() {
             password: 'password'
         }
     ];
-}
+};
 
 // Create dummy facts
-function makeFacts(users) {
+function makeFacts() {
     return [
         {
+            fact_id: 1,
+            user_id: 2,
             title: 'The Sky is Blue',
             text: 'During the day',
-            user_id: 2,
             status: 'Pending',
-            date_submitted: new Date('2020-06-01 01:55:48.524436+00')
+            date_submitted: '2020-06-01T01:55:48.000Z'
         }, 
         {
-            title: 'Grass is Orange',
+            fact_id: 2,
             user_id: 2,
+            title: 'Grass is Orange',
+            text: '',
             status: 'Under Review',
-            date_submitted: new Date('2020-06-01 01:55:48.524436+00'),
-            date_under_review: new Date('2020-06-02 01:55:48.524436+00')
+            date_submitted: '2020-06-01T01:55:48.000Z',
+            date_under_review: '2020-06-02T01:55:48.000Z'
         }, 
         {
+            fact_id: 3,
+            user_id: 2,
             title: 'Chocolate is sweet',
             text: 'Milk Chocolate',
-            user_id: 2,
             status: 'Approved',
-            date_submitted: new Date('2020-06-01 01:55:48.524436+00'),
-            date_under_review: new Date('2020-06-02 01:55:48.524436+00'),
-            date_approved: new Date('2020-06-03 01:55:48.524436+00')
+            date_submitted: '2020-06-01T01:55:48.000Z',
+            date_under_review: '2020-06-02T01:55:48.000Z',
+            date_approved: '2020-06-03T01:55:48.000Z'
         }, 
         {
-            title: 'The Moon is made of cheese',
+            fact_id: 4,
             user_id: 2,
+            title: 'The Moon is made of cheese',
+            text: '',
             status: 'Not True',
-            date_submitted: '2020-06-01 01:55:48.524436+00',
-            date_under_review: '2020-02-05 01:55:48.524436+00',
-            date_not_true: '2020-06-03 01:55:48.524436+00'
+            date_submitted: '2020-06-01T01:55:48.000Z',
+            date_under_review: '2020-02-05T01:55:48.000Z',
+            date_not_true: '2020-06-03T01:55:48.000Z'
         }
     ];
-}
+};
 
 function seedTables(db, users, facts) {
     return db.transaction(async trx => {
@@ -92,14 +98,14 @@ function seedTables(db, users, facts) {
 
         if (facts.length > 0) {
             await trx.into('facts').insert(facts);
-            await trx.raw(
-                `SELECT setval('facts_fact_id_seq', ?)`,
-                [facts[facts.length - 1].fact_id]
-            );
+            // await trx.raw(
+            //     `SELECT setval('facts_fact_id_seq', ?)`,
+            //     [facts[facts.length - 1].fact_id]
+            // );
         }
         
     });
-}
+};
 
 function makeExpectedFact(fact) {
     return {
@@ -108,9 +114,12 @@ function makeExpectedFact(fact) {
         text: fact.text,
         user_id: fact.user_id,
         status: fact.status,
-        date_submitted: fact.date_submitted
+        date_submitted: fact.date_submitted,
+        date_under_review: null,
+        date_approved: null,
+        date_not_true: null
     };
-}
+};
 
 function makeMaliciousFact(person) {
     const maliciousFact = {
@@ -128,7 +137,7 @@ function makeMaliciousFact(person) {
         maliciousFact,
         expectedFact
     };
-}
+};
 
 function makeFixtures() {
     const testUsers = makeUsers();
@@ -137,7 +146,7 @@ function makeFixtures() {
         testUsers,
         testFacts
     };
-}
+};
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign(
@@ -149,7 +158,7 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
             }
     );
     return `Bearer ${token}`;
-}
+};
 
 module.exports = {
     cleanTables,
@@ -160,5 +169,4 @@ module.exports = {
     makeMaliciousFact,
     makeFixtures,
     makeAuthHeader
-}
-
+};

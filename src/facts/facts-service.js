@@ -38,7 +38,7 @@ const FactsService = {
             fact_id: fact.fact_id,
             title: xss(fact.title),
             text: xss(fact.text),
-            user_id:    fact.user_id,
+            user_id: fact.user_id,
             status: xss(fact.status),
             date_submitted: fact.date_submitted,
             date_under_review: fact.date_under_review,
@@ -52,9 +52,6 @@ const FactsService = {
             .from('facts')
             .where('fact_id', fact_id)
             .update(fields)
-            .then(() => {
-                FactsService.getFactById(db, fact_id)
-            })
     }
 
 };

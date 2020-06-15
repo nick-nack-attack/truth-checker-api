@@ -9,42 +9,44 @@ AuthRouter
     .post('/login', jsonBodyParser, (req, res, next) => {
         const { email, password } = req.body;
         const loginUser = { email, password };
-        AuthService.checkAllFields(loginUser)
+        AuthService.checkAllFields(loginUser, res);
         AuthService.getUserWithEmail(
             req.app.get('db'),
             loginUser.email
         )
         .then(dbUser => {
-            if (!dbUser)
+            if (!dbUser) {
                 return res.status(400).json({
-                    error: 'Incorrect username or password'
+                    error: `Couldn't find user with email ${loginUser.email}`
                 })
-                return AuthService.comparePasswords(
-                    loginUser.password, dbUser.password
-                )
-                .then(compareResult => {
-                    if(!compareResult)
-                        return res.status(400).json({
-                            error: 'Incorrect username or password'
-                        })
-                        try {
-                            const sub = dbUser.email
-                            const payload = { user_id: dbUser.user_id }
-                            const user_id = dbUser.user_id
-                            res.send({
-                                authToken: AuthService.createJwt(
-                                    sub,
-                                    payload
-                                ),
-                                user_id
-                            })
-
-                        } catch(error) {
-                            console.log(error)
-                        }
-                })
+            }
+            return AuthService.comparePasswords(
+                loginUser.password, dbUser.password
+            )
+            .then(result => {
+                if (!result) {
+                    return res.status(400).json({
+                        error: `Incorrect Password`
+                    })
+                }
+                try {
+                    const sub = dbUser.email
+                    const payload = { user_id: dbUser.user_id }
+                    const user_id = dbUser.user_id
+                    res.send({
+                        authToken: AuthService.createJwt( sub, payload ),
+                        user_id
+                    })
+                }
+                catch(error) {
+                    return res.send(500).json({ error: `Couldn't create JWTToken` })
+                }
+            })
         })
-        .catch(next)
+        .catch(error => {
+            res.send(500).json({ error: `Couldn't create JWTToken` })
+            next();
+        })
     });
 
 AuthRouter
@@ -58,4 +60,4 @@ AuthRouter
             })
     });
 
-module.exports = authRouter
+module.exports = AuthRouter;
