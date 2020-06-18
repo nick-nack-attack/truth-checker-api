@@ -59,8 +59,23 @@ FactsRouter
         })
     })
     .patch(jsonBodyParser, (req, res, next) => {
-        const {title, text, status} = req.body;
-        const fact = {title, text, status};
+        const {
+            title, 
+            text, 
+            user_id,
+            date_submitted,
+            date_under_review,
+            date_approved,
+            date_not_true
+        } = req.body;
+        const fact = { title, text, user_id, date_submitted, date_under_review, date_approved, date_not_true };
+
+        for (const [key, value] of Object.entries(fact))
+            if (value == null) 
+                delete fact[key] 
+            
+        console.log(`here is the fact`, fact)
+
         const numOfValues = Object.values(fact).filter(Boolean).length;
         if(numOfValues === 0) {
             return (
