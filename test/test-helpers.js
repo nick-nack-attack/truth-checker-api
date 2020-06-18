@@ -43,26 +43,26 @@ function makeFacts() {
     return [
         {
             fact_id: 1,
-            user_id: 2,
             title: 'The Sky is Blue',
             text: 'During the day',
+            user_id: 2,
             status: 'Pending',
             date_submitted: '2020-06-01T01:55:48.000Z'
         }, 
         {
             fact_id: 2,
-            user_id: 2,
             title: 'Grass is Orange',
             text: '',
+            user_id: 2,
             status: 'Under Review',
             date_submitted: '2020-06-01T01:55:48.000Z',
             date_under_review: '2020-06-02T01:55:48.000Z'
         }, 
         {
             fact_id: 3,
-            user_id: 2,
             title: 'Chocolate is sweet',
             text: 'Milk Chocolate',
+            user_id: 2,
             status: 'Approved',
             date_submitted: '2020-06-01T01:55:48.000Z',
             date_under_review: '2020-06-02T01:55:48.000Z',
@@ -70,9 +70,9 @@ function makeFacts() {
         }, 
         {
             fact_id: 4,
-            user_id: 2,
             title: 'The Moon is made of cheese',
             text: '',
+            user_id: 2,
             status: 'Not True',
             date_submitted: '2020-06-01T01:55:48.000Z',
             date_under_review: '2020-02-05T01:55:48.000Z',
@@ -98,10 +98,10 @@ function seedTables(db, users, facts) {
 
         if (facts.length > 0) {
             await trx.into('facts').insert(facts);
-            // await trx.raw(
-            //     `SELECT setval('facts_fact_id_seq', ?)`,
-            //     [facts[facts.length - 1].fact_id]
-            // );
+            await trx.raw(
+                `SELECT setval('facts_fact_id_seq', ?)`,
+                [facts[facts.length - 1].fact_id]
+            );
         }
         
     });

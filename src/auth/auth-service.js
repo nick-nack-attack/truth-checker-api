@@ -4,15 +4,6 @@ const config = require('../config');
 
 const AuthService = {
 
-    checkAllFields(loginUser, res) {
-        for (const [key, value] of Object.entries(loginUser))
-            if (key !== "email" & key !== "password") {
-                return res.status(400).json({
-                    error: `Please provide ${key}`
-                })
-        }
-    },
-
     comparePasswords(password, hash) {
         return bcrypt.compare(password, hash)
     },

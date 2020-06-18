@@ -20,17 +20,19 @@ const FactsService = {
             .from('facts')
             .select('*')
             .where('fact_id', fact_id)
+            .first()
     },
 
-    insertFact(db, fact) {
-        return db
+    insertFact: (db, fact) => {
+        return (
+            db
             .insert(fact)
             .into('facts')
             .returning('*')
             .then(([fact]) => fact)
             .then(fact =>
                 FactsService.getFactById(db, fact.fact_id)    
-            )
+            ))
     },
 
     serializeFact(fact) {
