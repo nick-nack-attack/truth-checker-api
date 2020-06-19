@@ -9,7 +9,7 @@ const jsonBodyParser = express.json();
 ReportsRouter
     .route('/')
     .get((req, res, next) => {
-        ReportsService.getAllReports(
+        ReportsService.getReports(
             req.app.get('db')
         )
         .then(report => {
