@@ -4,7 +4,7 @@ const helpers = require('./test-helpers');
 const { expect } = require('chai');
 const supertest = require('supertest');
 
-describe(`reports endpoints`, () => {
+describe.only(`reports endpoints`, () => {
     // set up db, knex instance, etc for tests
     let db;
     const { 
@@ -69,11 +69,11 @@ describe(`reports endpoints`, () => {
                 );
             });
 
-            it(`responds with 200 and an array of reports`, () => {
+            it(`responds with 200`, () => {
                 return (
                     supertest(app)
                         .get(`/api/reports`)
-                        .expect(200, testReports)
+                        .expect(200)
                 )        
 
             });
@@ -116,7 +116,7 @@ describe(`reports endpoints`, () => {
 
         context(`given report does exist`, function() {
 
-            it(`responds 200 and report is updated`, () => {
+            it(`responds 200 and report is updated`, function() {
                 this.retries(3);
                 const report_id = 1;
                 const updatedReport = {
@@ -131,15 +131,82 @@ describe(`reports endpoints`, () => {
                         .patch(`/api/reports/id/${report_id}`)
                         .send(updatedReport)
                         .expect(201)
-                        .then(res => {
+                        .then(() => {
                             return (
                                 supertest(app)
                                     .get(`/api/reports/id/${report_id}`)
                                     .expect(200)
                                     .expect(res => {
-                                        expect(res.body.report_status).to.eql('Approved');
+                                        expect(res.body.report_status).to.eql('Approved')
                                     })
                             )
+                        })
+                )
+            })
+
+        })
+
+    })
+
+    describe(`POST /api/reports`, () => {
+
+        beforeEach(`seed db`, () => {
+            return (
+                helpers.seedTables(
+                    db,
+                    testUsers,
+                    testFacts,
+                    testReports
+                )
+            );
+        });
+
+        context(`given fact does not exist`, () => {
+
+            it(`responds 404`, () => {
+                const factToReport = { 
+                    fact_id: 1000 
+                };
+                return (
+                    supertest(app)
+                        .post(`/api/reports`)
+                        .send(factToReport)
+                        .expect(404, {
+                            error: `Fact doesn't exist`
+                        })
+
+                )
+            })
+
+        })
+
+        context(`given there are reports`, () => {
+
+            it(`responds 400 on bad request`, () => {
+                const badRequest = {
+                    "report_status": "Approved"
+                };
+                return (
+                    supertest(app)
+                        .post(`/api/reports`)
+                        .send(badRequest)
+                        .expect(400, {
+                            error: "Must include fact_id as integer"
+                        })
+                )
+            });
+
+            it(`responds 201 and new report`, function() {
+                const factToReport = { 
+                    fact_id: 1 
+                };
+                return (
+                    supertest(app)
+                        .post(`/api/reports`)
+                        .send(factToReport)
+                        .expect(201)
+                        .expect(res => {
+                            expect(res.body).to.have.property('report_id')
                         })
                 )
             })

@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const ReportsService = require('./reports-service');
+const FactsService = require('../facts/facts-service');
 
 const ReportsRouter = express.Router();
 const jsonBodyParser = express.json();
@@ -15,6 +16,50 @@ ReportsRouter
             res.json(report)
         })
         .catch(next)
+    })
+    .post(jsonBodyParser, (req, res, next) => {
+        
+        const { fact_id } = req.body;
+        const newReport = { 
+            fact_id: fact_id, 
+            report_status: 'Processing' 
+        };
+
+        try {
+            FactsService.getFactById(
+                req.app.get('db'),
+                newReport.fact_id
+            )
+            .then(fact => {
+                ReportsService.insertReport(
+                    req.app.get('db'),
+                    newReport
+                )
+                .then(createdReport => {
+                    return (
+                        res.status(201)
+                        .location(`/api/reports/id/${createdReport.report_id}`)
+                        .json(createdReport)
+                    )
+                })
+                .catch(() => {
+                    return (
+                        res.status(404).json({
+                            error: `Fact doesn't exist`
+                        })
+                    )
+                })
+            })
+            .catch(err => {
+                return res.status(400).json({
+                    error: `Must include fact_id as integer`
+                })
+            })
+        }
+        catch {
+            next()
+        }
+
     })
 
 ReportsRouter
@@ -35,43 +80,43 @@ ReportsRouter
         const reportToUpdate = { report_status };
         const report_id = req.params.report_id;
 
-        if (!report_status) {
-            return (
-                res.status(400).json({
-                    error: { message: `Request body content requires status change` }
-                })
-            )
-        }
-        if (report_status !== 'Processing' && report_status === 'Approved' && report_status !== 'Denied') {
-            return (
-                res.status(400).json({
-                    error: { message: `Status change must be either 'Processing', 'Approved', or 'Denied'` }
-                })
-            )
-        };
-        if (reportToUpdate.length === 0) {
-            return (
-                res.status(400).json({
-                    error: { message: `Request body content requires status change` }
-                })
-            )
-        };
-        
-        ReportsService.updateReport(
-            req.app.get('db'),
-            report_id,
-            reportToUpdate
-        )
-        .then(() => {
-            ReportsService.getReportById(
+        try {
+
+            ReportsService.updateReport(
                 req.app.get('db'),
-                report_id
+                report_id,
+                reportToUpdate
             )
             .then(report => {
                 return res.status(201).json(report)
             })
-        })
-        .catch(next)
+            .catch(() => {
+                return res.status(400).json({
+                    error: `Request body must include report_status 'Processing', 'Approved', or 'Denied'`
+                })
+            })
+
+        }
+        catch(err) {
+            console.log(`catch ran!`, err)
+            next()
+        }
+        
+        // ReportsService.updateReport(
+        //     req.app.get('db'),
+        //     report_id,
+        //     reportToUpdate
+        // )
+        // .then(() => {
+        //     ReportsService.getReportById(
+        //         req.app.get('db'),
+        //         report_id
+        //     )
+        //     .then(report => {
+        //         return res.status(201).json(report)
+        //     })
+        // })
+        //.catch(next)
     })
 
 async function checkReportExists(req, res, next) {
