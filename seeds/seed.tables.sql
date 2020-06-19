@@ -2,7 +2,8 @@ BEGIN;
 
 TRUNCATE
     users,
-    facts
+    facts,
+    reports
     RESTART IDENTITY CASCADE;
 
 INSERT INTO users ("role", "email", "password", "date_created")
@@ -16,5 +17,11 @@ INSERT INTO facts ("title", "text", "user_id", "status")
         ('Grass is Orange', '', 2, 'Under Review'),
         ('Chocolate is sweet', 'Milk Chocolate', 2, 'Approved'),
         ('The Moon is made of cheese', '', 2, 'Not True');
+
+INSERT INTO reports ("report_id", "fact_id", "date_created", "report_status")
+    VALUES
+        (1, 1, '2020-06-06', 'Processing'),
+        (2, 2, '2020-06-07', 'Processing'),
+        (3, 3, '2020-06-08', 'Processing');
 
 COMMIT;

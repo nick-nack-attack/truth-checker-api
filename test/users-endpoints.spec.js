@@ -29,6 +29,7 @@ describe(`user endpoints`, () => {
                 helpers.seedTables(
                     db,
                     [],
+                    [],
                     []
                 )
             );
@@ -43,7 +44,7 @@ describe(`user endpoints`, () => {
         // context 2
         context(`users in db`, () => {
             // set up db
-            beforeEach('seed db', () => helpers.seedTables( db, testUsers, [] ))
+            beforeEach('seed db', () => helpers.seedTables( db, testUsers, [], [] ))
             // run tests
             it(`responds 200 and users`, () => {
                 return (

@@ -10,6 +10,7 @@ const { NODE_ENV } = require('./config');
 const UsersRouter = require('./users/users-router');
 const FactsRouter = require('./facts/facts-router');
 const AuthRouter = require('./auth/auth-router');
+const ReportsRouter = require('./reports/reports-router');
 
 const app = express();
 
@@ -23,7 +24,8 @@ app.use(helmet());
 
 app.use('/api/users', UsersRouter);
 app.use('/api/facts', FactsRouter);
-app.use('/api/auth', AuthRouter)
+app.use('/api/auth', AuthRouter);
+app.use('/api/reports', ReportsRouter);
 
 app.get('/', (req, res) => {
   res.send(`This is the Department of Truth and Facts Api Service`)

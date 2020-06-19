@@ -37,6 +37,7 @@ describe(`auth endpoints`, () => {
                 helpers.seedTables(
                     db,
                     testUsers,
+                    [],
                     []
                 )
             );  

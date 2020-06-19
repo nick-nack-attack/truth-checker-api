@@ -68,14 +68,15 @@ FactsRouter
             date_not_true
         } = req.body;
 
-        const fact = { title, text, user_id, date_submitted, date_under_review, date_approved, date_not_true };
+        const statusChange = date_not_true ? 'Not true' : date_approved ? 'Approved' : date_under_review ? 'Under Review' : 'Pending';
+        const fact = { title, text, user_id, status: statusChange, date_submitted, date_under_review, date_approved, date_not_true };
         const fact_id = req.params.fact_id
 
         for (const [key, value] of Object.entries(fact)) {
             if (value == null) {
                 delete fact[key] 
             } 
-        }
+        };
 
         const numOfValues = Object.values(fact).filter(Boolean).length;
 

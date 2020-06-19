@@ -34,6 +34,7 @@ describe(`facts endpoints`, () => {
                     helpers.seedTables(
                         db,
                         testUsers,
+                        [],
                         []
                     )
                 );
@@ -54,7 +55,8 @@ describe(`facts endpoints`, () => {
                 helpers.seedTables(
                     db,
                     testUsers,
-                    testFacts
+                    testFacts,
+                    []
                 )
             );
 
@@ -86,6 +88,7 @@ describe(`facts endpoints`, () => {
                 helpers.seedTables(
                     db,
                     testUsers,
+                    [],
                     []
                 )
             );
@@ -110,7 +113,8 @@ describe(`facts endpoints`, () => {
                 helpers.seedTables(
                     db,
                     testUsers,
-                    testFacts
+                    testFacts,
+                    []
                 )
             );
 
@@ -137,6 +141,7 @@ describe(`facts endpoints`, () => {
                     helpers.seedTables(
                         db,
                         testUsers,
+                        [],
                         []
                     )
                 );
@@ -175,7 +180,8 @@ describe(`facts endpoints`, () => {
                     helpers.seedTables(
                         db,
                         testUsers,
-                        testFacts
+                        testFacts,
+                        []
                     )
                 );
             });
@@ -218,6 +224,7 @@ describe(`facts endpoints`, () => {
                     helpers.seedTables(
                         db,
                         [],
+                        [],
                         []
                     )
                 );
@@ -243,7 +250,8 @@ describe(`facts endpoints`, () => {
                     helpers.seedTables(
                         db,
                         testUsers,
-                        testFacts
+                        testFacts,
+                        []
                     )
                 );
             });
@@ -275,7 +283,8 @@ describe(`facts endpoints`, () => {
                 helpers.seedTables(
                     db,
                     testUsers,
-                    testFacts
+                    testFacts,
+                    []
                 )
             );
         });
@@ -312,8 +321,6 @@ describe(`facts endpoints`, () => {
                     ...fact,
                     //date_submitted: new Date(testFacts[fact_id - 1].date_created).toLocaleString()
                 };
-                console.log(`EXPECTDFACT.titl`, fact.title)
-                console.log(`CONST FACT`, expectedFact)
                 return (
                     supertest(app)
                         .patch(`/api/facts/id/${fact_id}`)
@@ -326,7 +333,6 @@ describe(`facts endpoints`, () => {
                                     .expect(200)
                                     .expect(res => {
                                         expect(res.body.title).to.eql(expectedFact.title);
-                                        console.log(res)
                                         //const actualDatedSubmitted = new Date(res.body.date_submitted).toLocaleString();
                                         //expect(expectedFact.date_submitted).to.eql(actualDatedSubmitted).toLocaleString();
                                     })
