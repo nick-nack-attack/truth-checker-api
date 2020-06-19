@@ -17,7 +17,7 @@ const ReportsService = {
                             'text', fct.text,
                             'user_id', fct.user_id,
                             'fact_status', fct.status,
-                            'dated_submitted', fct.date_submitted,
+                            'date_submitted', fct.date_submitted,
                             'date_approved', fct.date_approved,
                             'date_not_true', fct.date_not_true
                         )
