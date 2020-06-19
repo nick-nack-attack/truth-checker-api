@@ -137,7 +137,7 @@ describe(`reports endpoints`, () => {
                                     .get(`/api/reports/id/${report_id}`)
                                     .expect(200)
                                     .expect(res => {
-                                        expect(res.body.report_status).to.eql(expectedReport.report_status);
+                                        expect(res.body.report_status).to.eql('Approved');
                                     })
                             )
                         })

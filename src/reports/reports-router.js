@@ -31,11 +31,24 @@ ReportsRouter
         .catch(next)
     })
     .patch(jsonBodyParser, (req, res, next) => {
-        const {
-            report_status
-        } = req.body;
+        const { report_status } = req.body;
         const reportToUpdate = { report_status };
         const report_id = req.params.report_id;
+
+        if (!report_status) {
+            return (
+                res.status(400).json({
+                    error: { message: `Request body content requires status change` }
+                })
+            )
+        }
+        if (report_status !== 'Processing' && report_status === 'Approved' && report_status !== 'Denied') {
+            return (
+                res.status(400).json({
+                    error: { message: `Status change must be either 'Processing', 'Approved', or 'Denied'` }
+                })
+            )
+        };
         if (reportToUpdate.length === 0) {
             return (
                 res.status(400).json({
@@ -43,6 +56,7 @@ ReportsRouter
                 })
             )
         };
+        
         ReportsService.updateReport(
             req.app.get('db'),
             report_id,
