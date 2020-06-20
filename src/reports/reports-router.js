@@ -13,7 +13,7 @@ ReportsRouter
             req.app.get('db')
         )
         .then(report => {
-            res.json(report)
+            res.json(ReportsService.removeDupesReduce(report))
         })
         .catch(next)
     })
