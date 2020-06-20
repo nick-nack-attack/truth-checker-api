@@ -98,25 +98,9 @@ ReportsRouter
 
         }
         catch(err) {
-            console.log(`catch ran!`, err)
             next()
         }
-        
-        // ReportsService.updateReport(
-        //     req.app.get('db'),
-        //     report_id,
-        //     reportToUpdate
-        // )
-        // .then(() => {
-        //     ReportsService.getReportById(
-        //         req.app.get('db'),
-        //         report_id
-        //     )
-        //     .then(report => {
-        //         return res.status(201).json(report)
-        //     })
-        // })
-        //.catch(next)
+
     })
 
 async function checkReportExists(req, res, next) {

@@ -73,6 +73,7 @@ describe(`facts endpoints`, () => {
                             supertest(app)
                                 .get(`/api/facts/id/${testFacts[0].fact_id}`)
                                 .expect(200, expectedFacts[0])
+                                
                         );
             });
 

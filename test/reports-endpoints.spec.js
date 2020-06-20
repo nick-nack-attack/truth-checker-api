@@ -4,7 +4,7 @@ const helpers = require('./test-helpers');
 const { expect } = require('chai');
 const supertest = require('supertest');
 
-describe.only(`reports endpoints`, () => {
+describe(`reports endpoints`, () => {
     // set up db, knex instance, etc for tests
     let db;
     const { 

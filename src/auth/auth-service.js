@@ -4,11 +4,11 @@ const config = require('../config');
 
 const AuthService = {
 
-    comparePasswords(password, hash) {
+    comparePasswords: (password, hash) => {
         return bcrypt.compare(password, hash)
     },
 
-    createJwt(subject, payload) {
+    createJwt: (subject, payload) => {
         return jwt.sign(payload, config.JWT_SECRET, {
             subject,
             expiresIn: config.JWT_EXPIRY,
@@ -16,20 +16,20 @@ const AuthService = {
         })
     },
 
-    getUserWithEmail(db, email) {
+    getUserWithEmail: (db, email) => {
         return db('users')
         .where({ email })
         .first()
     },
 
-    parseBasicToken(token) {
+    parseBasicToken: (token) => {
         return Buffer
             .from(token, 'base64')
             .toSpring()
             .split(':')
     },
 
-    verifyJwt(token) {
+    verifyJwt: (token) => {
         return jwt.verify(token, config.JWT_SECRET,
             {
                 algorithms: ['HS256']

@@ -29,7 +29,7 @@ function makeUsers() {
         {
             user_id: 1,
             role: 'Admin',
-            email: 'admin@gmail.com',
+            email: 'admin@dtf.gov',
             password: 'password'
         }, 
         {
@@ -195,7 +195,7 @@ function makeFixtures() {
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign(
-        {user_id},
+        { user_id: user.user_id },
         secret,
             {
                 subject: user.email,
