@@ -13,11 +13,11 @@ This is the API used by the Truth Checker app. It's built on a PostgreSQL databa
 
 ## Setup
 Complete the following steps to start a new project (NEW-PROJECT-NAME):
-1. Clone this repo to your local machine `git clone https://github.com/nick-nack-attack/truth-checker-api.git NEW-PROJECT`
-2.`cd` into the cloned repository
-3.Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. The .env file holds the settings for the application to be run locally.
+- Clone this repo to your local machine `git clone https://github.com/nick-nack-attack/truth-checker-api.git NEW-PROJECT`
+- `cd` into the cloned repository
+- Make a fresh start of the git history for this project with `rm -rf .git && git init`
+- Install the node dependencies `npm install`
+- The .env file holds the settings for the application to be run locally.
 
 ## Technology
 - React (16.13.1)
@@ -28,24 +28,24 @@ Complete the following steps to start a new project (NEW-PROJECT-NAME):
 ## Endpoints
 
 ### Authentication
-• POST `/api/auth/login`
-• REFRESH `/api/auth/refresh`
+- POST `/api/auth/login`
+- REFRESH `/api/auth/refresh`
 
 ### Facts
-• GET `/api/facts`
-• POST `/api/facts`
-• GET `/api/facts/id/:fact_id`
-• DELETE `/api/facts/id/:fact_id`
-• PATCH `/api/facts/id/:fact_id`
+- GET `/api/facts`
+- POST `/api/facts`
+- GET `/api/facts/id/:fact_id`
+- DELETE `/api/facts/id/:fact_id`
+- PATCH `/api/facts/id/:fact_id`
 
 ### Reports
-• GET `/api/reports`
-• POST `/api/reports`
-• GET `/api/reports/id/:report_id`
-• PATCH `/api/reports/id/:report_id`
+- GET `/api/reports`
+- POST `/api/reports`
+- GET `/api/reports/id/:report_id`
+- PATCH `/api/reports/id/:report_id`
 
 ### User
-• GET `/api/users`
+- GET `/api/users`
 
 ## Scripts
 
