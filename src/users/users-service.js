@@ -1,3 +1,4 @@
+// Users Service
 const xss = require('xss');
 
 const UsersService = {
@@ -8,6 +9,7 @@ const UsersService = {
             .select('*')
     },
 
+    // prevent malicious attacks by form submissions
     serializeUser(user) {
         return {
             user_id: user.user_id,

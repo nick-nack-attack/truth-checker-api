@@ -1,21 +1,23 @@
-// Server entry point
+// server entry point
 const app = require('./app');
 
-// Configuration
+// configuration
 require('dotenv').config();
 const { PORT, DATABASE_URL } = require('./config');
 
-// Utilities
+// utilities
 const knex = require('knex');
 
-// Database
+// database
 const db = knex({
     client: 'pg',
     connection: DATABASE_URL
   });
 
-// Global variables
+// global variables
 app.set('db', db);
 
-// Oven is hot means it's listening
-app.listen(PORT, () => console.log(`The oven is hot on ${PORT}`));
+// "oven is hot" means "it's listening"
+app.listen(PORT, () => {
+  console.log(`The oven is hot on ${PORT}`)
+});

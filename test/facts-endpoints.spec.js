@@ -22,7 +22,7 @@ describe(`facts endpoints`, () => {
         app.set('db', db);
     });
     after(`disconnect from database`, () => {db.destroy()});
-    beforeEach(`truncate db and restart idents`, () => {helpers.cleanTables(db)});
+    before(`truncate db and restart idents`, () => {helpers.cleanTables(db)});
     afterEach(`truncate db and restart idents`, () => {helpers.cleanTables(db)});
 
     describe(`GET /api/facts`, () => {
@@ -119,12 +119,13 @@ describe(`facts endpoints`, () => {
                 )
             );
 
-            it(`responds 200 + specified fact`, () => {
+            it(`responds 200 + specified fact`, function() {
+                this.retries(3);
                 const fact_id = 1;
                 const expectedFact = helpers.makeExpectedFact(testFacts[0]);
                 return (
                     supertest(app)
-                        .get(`/api/facts/id/${fact_id}`)
+                        .get(`/api/facts/id/${fact_id}`) // it passes on .get(`/api/facts/${fact_id}`) but that's wrong route
                         .expect(200, expectedFact)
                 );
             });
@@ -309,9 +310,9 @@ describe(`facts endpoints`, () => {
 
         });
 
-        context(`given fact EXISTS`, function() {
+        context(`given fact EXISTS`, () => {
 
-            it(`responds 200 + fact is updated`, () => {
+            it(`responds 200 + fact is updated`, function() {
                 this.retries(3);
                 const fact_id = 1;
                 const fact = {

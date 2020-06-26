@@ -1,9 +1,12 @@
-const express = require('express');
-const AuthService = require('./auth-service');
+// Authentication Router
+const { Router, json } = require('express');
 const { requireAuth } = require('../middleware/jwt-auth');
+const jsonBodyParser = json();
+const AuthRouter = Router();
 
-const AuthRouter = express.Router();
-const jsonBodyParser = express.json();
+// service
+const AuthService = require('./auth-service');
+
 
 AuthRouter
     .post('/login', jsonBodyParser, (req, res, next) => {
@@ -11,6 +14,7 @@ AuthRouter
         const { email, password } = req.body;
         const loginUser = { email, password };
 
+        // verify email and password are in request body
         for (const [key, value] of Object.entries(loginUser)) {
             if (value == null) {
                 return (
@@ -56,7 +60,8 @@ AuthRouter
                     }
                 })
             })
-            .catch(error => {
+            // handle error if present
+            .catch(() => {
                 res.send(500).json({ error: `Couldn't create JWTToken` })
                 next();
             })

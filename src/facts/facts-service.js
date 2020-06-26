@@ -39,7 +39,6 @@ const FactsService = {
         return {
             fact_id: fact.fact_id,
             title: xss(fact.title),
-            text: xss(fact.text),
             user_id: fact.user_id,
             status: xss(fact.status),
             date_submitted: fact.date_submitted,

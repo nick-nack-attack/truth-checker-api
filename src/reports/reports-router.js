@@ -1,10 +1,14 @@
-const express = require('express');
+// Reports router
+const { Router, json } = require('express');
+const ReportsRouter = Router();
+const jsonBodyParser = json();
 const path = require('path');
+
+// services
 const ReportsService = require('./reports-service');
 const FactsService = require('../facts/facts-service');
 
-const ReportsRouter = express.Router();
-const jsonBodyParser = express.json();
+// omitting auth middleware for initial mvp release
 
 ReportsRouter
     .route('/')
@@ -18,7 +22,6 @@ ReportsRouter
         .catch(next)
     })
     .post(jsonBodyParser, (req, res, next) => {
-        
         const { fact_id } = req.body;
         const newReport = { 
             fact_id: fact_id, 
@@ -30,7 +33,7 @@ ReportsRouter
                 req.app.get('db'),
                 newReport.fact_id
             )
-            .then(fact => {
+            .then(() => {
                 ReportsService.insertReport(
                     req.app.get('db'),
                     newReport
@@ -38,7 +41,7 @@ ReportsRouter
                 .then(createdReport => {
                     return (
                         res.status(201)
-                        .location(`/api/reports/id/${createdReport.report_id}`)
+                        .location( (path.posix.join(req.originalUrl), `/id/${createdReport.report_id}`)) // alt `/api/reports/id/${createdReport.report_id}`)
                         .json(createdReport)
                     )
                 })
@@ -97,12 +100,16 @@ ReportsRouter
             })
 
         }
+
         catch(err) {
-            next()
+            console.log(err)
+            next();
+
         }
 
-    })
+    });
 
+// async await for promises
 async function checkReportExists(req, res, next) {
     try {
         const report = await ReportsService.getReportById(
@@ -114,12 +121,12 @@ async function checkReportExists(req, res, next) {
                 error: `Report doesn't exist`
             })
         } else {
-            res.report = report
-            next()
+            res.report = report;
+            next();
         }
     }
-    catch {
-        next()
+    catch(error) {
+        next(error);
     }
 };
 

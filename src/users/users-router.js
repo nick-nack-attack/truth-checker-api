@@ -1,10 +1,12 @@
-const express = require('express')
-const path = require('path')
+// Users Router
+const { Router } = require('express');
+const UsersRouter = Router();
+
+// service
 const UsersService = require('./users-service');
 
-const UsersRouter = express.Router();
-const jsonBodyParser = express.json();
-
+// creating users currently not supported.
+// for testing purposes
 UsersRouter
     .route('/')
     .get((req, res, next) => {

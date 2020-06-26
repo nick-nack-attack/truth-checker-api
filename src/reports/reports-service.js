@@ -1,7 +1,8 @@
-const xss = require('xss');
+// Reports Service
 
 const ReportsService = {
 
+    // get all reported facts
     getReports: (db) => {
         return db
             .from('reports AS rpt')
@@ -14,7 +15,6 @@ const ReportsService = {
                         json_build_object(
                             'fact_id', fct.fact_id,
                             'title', fct.title,
-                            'text', fct.text,
                             'user_id', fct.user_id,
                             'fact_status', fct.status,
                             'date_submitted', fct.date_submitted,
@@ -60,6 +60,7 @@ const ReportsService = {
             .update(fields)
     },
 
+    // if the same fact is reported > 1, then return the fact with the number of times it's been reported
     removeDupesReduce: (arr) => {
         let report = arr.reduce((acc, cur) => {
           let curFact = cur.reportedFact;

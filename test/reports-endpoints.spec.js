@@ -114,10 +114,20 @@ describe(`reports endpoints`, () => {
 
         })
 
-        context(`given report does exist`, function() {
-
-            it(`responds 200 and report is updated`, function() {
-                this.retries(3);
+        context(`given report does exist`, () => {
+            before(`seed db`, () => {
+                return (
+                    helpers.seedTables(
+                        db,
+                        testUsers,
+                        testFacts,
+                        testReports
+                    )
+                );
+            });
+            // try to seed the db here... it doesn't appear like this loop is seeding the right info
+            // *shrugs* No idea why the beforeEach wasn't firing. Maybe it only loops per context you have or something
+            it(`responds 200 and report is updated`, () => {
                 const report_id = 1;
                 const updatedReport = {
                     report_status: 'Approved'
@@ -196,7 +206,7 @@ describe(`reports endpoints`, () => {
                 )
             });
 
-            it(`responds 201 and new report`, function() {
+            it(`responds 201 and new report`, () => {
                 const factToReport = { 
                     fact_id: 1 
                 };

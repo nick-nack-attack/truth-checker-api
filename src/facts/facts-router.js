@@ -1,9 +1,11 @@
-const express = require('express')
-const path = require('path')
-const FactsService = require('./facts-service');
+// Facts Router
+const { Router, json } = require('express')
+const FactsRouter = Router();
+const jsonBodyParser = json();
+const path = require('path');
 
-const FactsRouter = express.Router();
-const jsonBodyParser = express.json();
+// service
+const FactsService = require('./facts-service');
 
 FactsRouter
     .route('/')
@@ -19,10 +21,11 @@ FactsRouter
     .post(jsonBodyParser, (req, res, next) => {
         const { title, user_id } = req.body;
         const date_submitted = new Date();
-        const status = 'Pending';
-        const text = '';
-        const newFact = { title, text, user_id, status, date_submitted };
+        // newly submitted facts default to status 'Pending'
+        const status = 'Pending'; 
+        const newFact = { title, user_id, status, date_submitted };
 
+        // if a value is missing from the request body then return error
         for (const [key,value] of Object.entries(newFact))
             if (value === undefined || value === null) 
                 return res.status(400).json({
@@ -35,8 +38,8 @@ FactsRouter
         )
         .then(fact => {
             res.status(201)
-            .location(`/api/facts/id/${fact.fact_id}`)
-            .json(fact)
+            .location(path.posix.join(req.originalUrl, `/id/${fact.fact_id}`)) // alt .location(`/api/facts/id/${fact.fact_id}`)
+            .json(FactsService.serializeFact(fact))
         })
         .catch(next)
     })
@@ -54,13 +57,17 @@ FactsRouter
             fact_id
         )
         .then(() => {
-            res.status(204).end()
+            return (
+                res
+                    .status(204)
+                    .end()
+            );
         })
+        .catch(next);
     })
     .patch(jsonBodyParser, (req, res, next) => {
         const {
             title, 
-            text, 
             user_id,
             date_submitted,
             date_under_review,
@@ -68,23 +75,46 @@ FactsRouter
             date_not_true
         } = req.body;
 
-        const statusChange = date_not_true ? 'Not true' : date_approved ? 'Approved' : date_under_review ? 'Under Review' : 'Pending';
-        const fact = { title, text, user_id, status: statusChange, date_submitted, date_under_review, date_approved, date_not_true };
+        // set new status if a date has been submitted
+        const statusChange = date_not_true 
+            ? 'Not true' 
+            : date_approved 
+            ? 'Approved' 
+            : date_under_review 
+            ? 'Under Review' 
+            : 'Pending';
+
+        const fact = { 
+            title, 
+            user_id, 
+            status: statusChange, 
+            date_submitted, 
+            date_under_review, 
+            date_approved, 
+            date_not_true };
+
         const fact_id = req.params.fact_id
 
+        // remove any field that doesn't have a value (null)
         for (const [key, value] of Object.entries(fact)) {
             if (value == null) {
                 delete fact[key] 
             } 
         };
 
+        // set how many values there are left
         const numOfValues = Object.values(fact).filter(Boolean).length;
 
+        // if all values are null, or title is not included, return error
         if(numOfValues === 0) {
             return (
-                res.status(400).json({
-                    error: {message: `Request body content requires 'title'`}
-                })
+                res
+                    .status(400)
+                    .json({
+                        error: {
+                            message: `Request body content requires 'title'`
+                        }
+                    })
             )
         };
 
@@ -105,6 +135,7 @@ FactsRouter
 
     })
 
+// check to see if the fact exists
 async function checkFactExist(req, res, next) {
     const knexInst = req.app.get('db');
     try {
@@ -117,14 +148,14 @@ async function checkFactExist(req, res, next) {
                 error: `Fact doesn't exist`
             })
         } else {
-            res.fact = fact
-            next()
+            res.fact = fact;
+            next();
         }
     }
-    catch {
-        next()
+    catch(error) {
+        next(error);
     }
     
-}
+};
 
-    module.exports = FactsRouter;
+module.exports = FactsRouter;

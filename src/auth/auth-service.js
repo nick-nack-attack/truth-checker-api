@@ -1,6 +1,9 @@
+// Authentican service
+const config = require('../config');
+
+// utils
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const config = require('../config');
 
 const AuthService = {
 
@@ -33,9 +36,10 @@ const AuthService = {
         return jwt.verify(token, config.JWT_SECRET,
             {
                 algorithms: ['HS256']
-        })
+            }
+        );
     }
 
-}
+};
 
 module.exports = AuthService;
