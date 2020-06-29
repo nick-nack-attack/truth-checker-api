@@ -33,9 +33,11 @@ AuthRouter
         )
             .then(dbUser => {
                 if (!dbUser) {
-                    return res.status(400).json({
-                        error: `Incorrect email or password`
-                    })
+                    return res
+                        .status(400)
+                        .json({
+                            error: `Incorrect email or password`
+                        })
                 }
                 return AuthService.comparePasswords(
                     loginUser.password, dbUser.password
@@ -56,13 +58,21 @@ AuthRouter
                         })
                     }
                     catch(error) {
-                        return res.send(500).json({ error: `Couldn't create JWTToken` })
+                        return res
+                            .send(500)
+                            .json({ 
+                                error: `Couldn't create JWTToken` 
+                            })
                     }
                 })
             })
             // handle error if present
             .catch(() => {
-                res.send(500).json({ error: `Couldn't create JWTToken` })
+                res
+                    .send(500)
+                    .json({ 
+                        error: `Couldn't create JWTToken` 
+                    })
                 next();
             })
     });

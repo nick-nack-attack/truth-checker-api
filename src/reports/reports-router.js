@@ -47,16 +47,20 @@ ReportsRouter
                 })
                 .catch(() => {
                     return (
-                        res.status(404).json({
-                            error: `Fact doesn't exist`
-                        })
+                        res
+                            .status(404)
+                            .json({
+                                error: `Fact doesn't exist`
+                            })
                     )
                 })
             })
             .catch(err => {
-                return res.status(400).json({
-                    error: `Must include fact_id as integer`
-                })
+                return res
+                    .status(400)
+                    .json({
+                        error: `Must include fact_id as integer`
+                    })
             })
         }
         catch {
@@ -79,6 +83,7 @@ ReportsRouter
         .catch(next)
     })
     .patch(jsonBodyParser, (req, res, next) => {
+
         const { report_status } = req.body;
         const reportToUpdate = { report_status };
         const report_id = req.params.report_id;
@@ -94,9 +99,11 @@ ReportsRouter
                 return res.status(201).json(report)
             })
             .catch(() => {
-                return res.status(400).json({
-                    error: `Request body must include report_status 'Processing', 'Approved', or 'Denied'`
-                })
+                return res
+                    .status(400)
+                    .json({
+                        error: `Request body must include report_status 'Processing', 'Approved', or 'Denied'`
+                    })
             })
 
         }

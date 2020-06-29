@@ -3,13 +3,27 @@
 ## Description
 This is the API used by the Truth Checker app. It's built on a PostgreSQL database. It is a marketing piece for a music album.
 
+## Live Site
+https://truth-checker.vercel.app
+
 ## Table of Contents
-1. [Setup](#Setup)
-2. [Technology](#Technology)
-3. [Endpoints](#Endpoints)
-4. [Scripts](#Scripts)
-5. [Deploying](#Deploying)
-6. [Special Thanks](#Thanks)
+1. [Screenshots](#Screenshots)
+2. [Setup](#Setup)
+3. [Technology](#Technology)
+4. [Endpoints](#Endpoints)
+5. [Scripts](#Scripts)
+6. [Deploying](#Deploying)
+7. [Special Thanks](#Thanks)
+
+## Screenshots
+![Screenshots 1-3](https://github.com/nick-nack-attack/truth-checker-client/raw/master/docs/screenshots/screenshots1-3.jpg)
+• Main Feed, Facts, Menu
+![Screenshots 4-6](https://github.com/nick-nack-attack/truth-checker-client/raw/master/docs/screenshots/screenshots4-6.jpg)
+• About, Add Fact, Admin Login
+![Screenshots 7-9](https://github.com/nick-nack-attack/truth-checker-client/raw/master/docs/screenshots/screenshots7-9.jpg)
+• Admin Logged, Admin Menu, Reported Facts
+![Screenshots 10-12](https://github.com/nick-nack-attack/truth-checker-client/raw/master/docs/screenshots/screenshots10-12.jpg)
+• Edit Fact, Footer, Confirm Log Out
 
 ## Setup
 Complete the following steps to start a new project (NEW-PROJECT-NAME):
@@ -28,6 +42,7 @@ Complete the following steps to start a new project (NEW-PROJECT-NAME):
 ## Endpoints
 
 ### Authentication
+No authentication needed other than the admin password. 
 • POST `/api/auth/login`
 • REFRESH `/api/auth/refresh`
 
@@ -44,7 +59,7 @@ Complete the following steps to start a new project (NEW-PROJECT-NAME):
 • GET `/api/reports/id/:report_id`
 • PATCH `/api/reports/id/:report_id`
 
-### User
+### Users
 • GET `/api/users`
 
 ## Scripts

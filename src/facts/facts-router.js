@@ -51,7 +51,7 @@ FactsRouter
         return FactsService.serializeFact(res.json(res.fact))
     })
     .delete((req, res, next) => {
-        const {fact_id} = req.params;
+        const { fact_id } = req.params;
         FactsService.deleteFact(
             req.app.get('db'),
             fact_id

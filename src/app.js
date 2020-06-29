@@ -25,7 +25,7 @@ app.use(
     morganOption
   ),
   cors({
-      origin: CLIENT_ORIGIN
+    origin: CLIENT_ORIGIN
   }),
   helmet()
 );
