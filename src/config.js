@@ -5,6 +5,6 @@ module.exports = {
     TEST_DATABASE_URL: process.env.TEST_DATABASE_URL || "postgresql://postgres@localhost/truth_checker_test",
     JWT_SECRET: process.env.JWT_SECRET || 'change-this-secret',
     JWT_EXPIRY: process.env.JWT_EXPIRY || 6000,
-    CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || "https://truth-checker.vercel.app"
+    CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || "http://localhost:3000"
 }
 
