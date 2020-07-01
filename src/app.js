@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 // configuration
-const { NODE_ENV, CLIENT_ORIGIN } = require('./config');
+const { NODE_ENV } = require('./config');
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
@@ -19,18 +19,10 @@ const FactsRouter = require('./facts/facts-router');
 const AuthRouter = require('./auth/auth-router');
 const ReportsRouter = require('./reports/reports-router');
 
-
-
 // initialize middleware
-app.use(
-  morgan(
-    morganOption
-  ),
-  cors({
-    origin: CLIENT_ORIGIN
-  }),
-  helmet()
-);
+app.use(morgan(morganOption));
+app.use(cors());
+app.use(helmet());
 
 // basic root path to confirm server is running
 app.get('/', (req, res) => {
@@ -45,9 +37,7 @@ app.use('/api/facts', FactsRouter);
 app.use('/api/auth', AuthRouter);
 app.use('/api/reports', ReportsRouter);
 
-
-
-
+// error handler
  errorHandler = (error, req, res, next) => {
     let response;
     if (NODE_ENV === 'production') {

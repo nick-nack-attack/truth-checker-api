@@ -13,10 +13,10 @@ FactsRouter
         FactsService.getAllFacts(
             req.app.get('db')
         )
-        .then(fact => {
-            res.json(fact.map(FactsService.serializeFact))
-        })
-        .catch(next)
+            .then(fact => {
+                res.json(fact.map(FactsService.serializeFact))
+            })
+            .catch(next)
     })
     .post(jsonBodyParser, (req, res, next) => {
         const { title, user_id } = req.body;

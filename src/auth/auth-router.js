@@ -32,6 +32,7 @@ AuthRouter
             loginUser.email
         )
             .then(dbUser => {
+                // if the user doesn't exist, return error
                 if (!dbUser) {
                     return res
                         .status(400)
@@ -43,10 +44,13 @@ AuthRouter
                     loginUser.password, dbUser.password
                 )
                 .then(result => {
+                    // if request body password and db password don't match, return error
                     if (!result) {
-                        return res.status(400).json({
-                            error: `Incorrect email or password`
-                        })
+                        return res
+                            .status(400)
+                            .json({
+                                error: `Incorrect email or password`
+                            })
                     }
                     try {
                         const sub = dbUser.email
