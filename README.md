@@ -52,27 +52,27 @@ Documentation is provided for each eachpoint.
 
 ### Authentication
 
-• [POST](./docs/auth/login.md) `/api/auth/login`
-• ~REFRESH `/api/auth/refresh`~ Not currently supported
+- [POST](./docs/auth/login.md) `/api/auth/login`
+- ~REFRESH `/api/auth/refresh`~ Not currently supported
 
 ### Facts
 
-• [GET](./docs/facts/GET_facts.md) `/api/facts`
-• [POST](./docs/facts/POST_facts.md) `/api/facts`
-• [GET](./docs/facts/GET_fact.md) `/api/facts/id/:fact_id`
-• [DELETE](./docs/facts/DELETE_fact.md) `/api/facts/id/:fact_id`
-• [PATCH](./docs/facts/PATCH_fact.md) `/api/facts/id/:fact_id`
+- [GET](./docs/facts/GET_facts.md) `/api/facts`
+- [POST](./docs/facts/POST_facts.md) `/api/facts`
+- [GET](./docs/facts/GET_fact.md) `/api/facts/id/:fact_id`
+- [DELETE](./docs/facts/DELETE_fact.md) `/api/facts/id/:fact_id`
+- [PATCH](./docs/facts/PATCH_fact.md) `/api/facts/id/:fact_id`
 
 ### Reports
 
-• [GET](./docs/reports/GET_reports.md) `/api/reports`
-• [POST](./docs/reports/POST_reports.md) `/api/reports`
-• [GET](./docs/reports/GET_report.md) `/api/reports/id/:report_id`
-• [PATCH](./docs/reports/PATCH_report.md) `/api/reports/id/:report_id`
+- [GET](./docs/reports/GET_reports.md) `/api/reports`
+- [POST](./docs/reports/POST_reports.md) `/api/reports`
+- [GET](./docs/reports/GET_report.md) `/api/reports/id/:report_id`
+- [PATCH](./docs/reports/PATCH_report.md) `/api/reports/id/:report_id`
 
 ### Users
 
-• [GET](./docs/users/GET_users.md) `/api/users`
+- [GET](./docs/users/GET_users.md) `/api/users`
 
 ## Scripts
 
