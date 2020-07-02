@@ -22,5 +22,5 @@ app.set('db', db);
 
 // "oven is hot" means "it's listening"
 app.listen(PORT, () => {
-  console.log(`The oven is hot on ${PORT}`)
+  console.log(`The oven is hot on ${PORT}`);
 });
