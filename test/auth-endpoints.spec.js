@@ -100,7 +100,6 @@ describe(`auth endpoints`, () => {
                 config.JWT_SECRET,
                 {
                     subject: testUser.email,
-                    expiresIn: config.JWT_EXPIRY,
                     algorithm: 'HS256'
                 }
             );
