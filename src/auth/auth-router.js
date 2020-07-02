@@ -1,8 +1,8 @@
 // Authentication Router
 const { Router, json } = require('express');
-const { requireAuth } = require('../middleware/jwt-auth');
-const jsonBodyParser = json();
 const AuthRouter = Router();
+const jsonBodyParser = json();
+const { requireAuth } = require('../middleware/jwt-auth');
 
 // service
 const AuthService = require('./auth-service');
@@ -10,7 +10,6 @@ const AuthService = require('./auth-service');
 
 AuthRouter
     .post('/login', jsonBodyParser, (req, res, next) => {
-
         const { email, password } = req.body;
         const loginUser = { email, password };
 
@@ -26,14 +25,14 @@ AuthRouter
                 );
             };
         };
-
+    
         AuthService.getUserWithEmail(
             req.app.get('db'),
             loginUser.email
         )
             .then(dbUser => {
-                // if the user doesn't exist, return error
                 if (!dbUser) {
+                    // if the user doesn't exist, return error
                     return res
                         .status(400)
                         .json({
@@ -44,14 +43,15 @@ AuthRouter
                     loginUser.password, dbUser.password
                 )
                 .then(result => {
-                    // if request body password and db password don't match, return error
                     if (!result) {
+                        // if request body password and db password don't match, return error
                         return res
                             .status(400)
                             .json({
                                 error: `Incorrect email or password`
                             })
                     }
+
                     try {
                         const sub = dbUser.email
                         const payload = { user_id: dbUser.user_id }
@@ -60,25 +60,16 @@ AuthRouter
                             authToken: AuthService.createJwt( sub, payload ),
                             user_id
                         })
-                    }
-                    catch(error) {
+                    } catch(error) {
                         return res
-                            .send(500)
+                            .sendStatus(500)
                             .json({ 
                                 error: `Couldn't create JWTToken` 
                             })
                     }
                 })
             })
-            // handle error if present
-            .catch(() => {
-                res
-                    .send(500)
-                    .json({ 
-                        error: `Couldn't create JWTToken` 
-                    })
-                next();
-            })
+            
     });
 
 AuthRouter
@@ -89,6 +80,13 @@ AuthRouter
             res.send({
                 authToken: AuthService.createJwt(sub, payload),
                 user_id
+            })
+            .catch(err => {
+                res.sendStatus(500)
+                .json({ 
+                    error: `Couldn't create JWTToken`, err 
+                })
+            next();
             })
     });
 

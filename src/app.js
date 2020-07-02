@@ -1,6 +1,7 @@
 // main express root
 const express = require('express');
 const app = express();
+require('dotenv').config();
 
 // configuration
 const { NODE_ENV } = require('./config');
@@ -13,16 +14,16 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 
+// initialize middleware
+app.use(morgan(morganOption));
+app.use(cors());
+app.use(helmet());
+
 // routers 
 const UsersRouter = require('./users/users-router');
 const FactsRouter = require('./facts/facts-router');
 const AuthRouter = require('./auth/auth-router');
 const ReportsRouter = require('./reports/reports-router');
-
-// initialize middleware
-app.use(morgan(morganOption));
-app.use(cors());
-app.use(helmet());
 
 // basic root path to confirm server is running
 app.get('/', (req, res) => {
@@ -43,7 +44,7 @@ app.use('/api/reports', ReportsRouter);
     if (NODE_ENV === 'production') {
       response = { message: 'server error' }  // alt -> response = { error: { message: 'server error' } }
     } else {
-      console.error(error)
+      console.error('SOMETHING WENT WRONG!', error)
       response = { message: error.message, error }
     }
     res.status(500).json(response)

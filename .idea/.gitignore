@@ -6,3 +6,4 @@
 
 # env file
 .env
+src/.env

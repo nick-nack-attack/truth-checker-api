@@ -3,7 +3,10 @@ const app = require('./app');
 
 // configuration
 require('dotenv').config();
-const { PORT, DATABASE_URL } = require('./config');
+const {
+   PORT, 
+   DATABASE_URL 
+  } = require('./config');
 
 // utilities
 const knex = require('knex');
