@@ -1,8 +1,8 @@
 // server entry point
+require('dotenv').config();
 const app = require('./app');
 
 // configuration
-require('dotenv').config();
 const {
    PORT, 
    DATABASE_URL 
