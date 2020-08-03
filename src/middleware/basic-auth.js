@@ -14,7 +14,7 @@ function requireAuth(req, res, next) {
             });
     } else {
         basicToken = authToken.slice('basic '.length, authToken.length);
-    }
+    };
 
     const [ tokenUsername, tokenPassword ] = AuthService.parseBasicToken(basicToken);
 
@@ -33,7 +33,6 @@ function requireAuth(req, res, next) {
         tokenUsername
     )
     .then(user => {
-
         if (!user) {
             return (
                 res

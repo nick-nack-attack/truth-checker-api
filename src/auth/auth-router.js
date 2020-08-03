@@ -7,7 +7,6 @@ const { requireAuth } = require('../middleware/jwt-auth');
 // service
 const AuthService = require('./auth-service');
 
-
 AuthRouter
     .post('/login', jsonBodyParser, (req, res, next) => {
         const { email, password } = req.body;

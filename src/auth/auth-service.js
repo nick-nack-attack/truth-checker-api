@@ -1,4 +1,4 @@
-// Authentican service
+// Authentication service
 const config = require('../config');
 
 // utils
