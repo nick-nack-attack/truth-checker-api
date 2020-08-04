@@ -1,11 +1,12 @@
 // Facts Router
-const { Router, json } = require('express')
+const { Router, json } = require("express")
 const FactsRouter = Router();
 const jsonBodyParser = json();
-const path = require('path');
+const path = require("path");
 
 // service
-const FactsService = require('./facts-service');
+const FactsService = require("./facts-service");
+const uuid4 = require("uuid4");
 
 FactsRouter
     .route('/')
@@ -19,11 +20,13 @@ FactsRouter
             .catch(next)
     })
     .post(jsonBodyParser, (req, res, next) => {
+
         const { title, user_id } = req.body;
         const date_submitted = new Date();
         // newly submitted facts default to status 'Pending'
-        const status = 'Pending'; 
-        const newFact = { title, user_id, status, date_submitted };
+        const status = 'Pending';
+        const serial = uuid4();
+        const newFact = { title, user_id, status, date_submitted, serial };
 
         // if a value is missing from the request body then return error
         for (const [key,value] of Object.entries(newFact))
@@ -48,10 +51,14 @@ FactsRouter
     .route('/id/:fact_id')
     .all(checkFactExist)
     .get((req, res, next) => {
+
         return FactsService.serializeFact(res.json(res.fact))
+
     })
     .delete((req, res, next) => {
+
         const { fact_id } = req.params;
+
         FactsService.deleteFact(
             req.app.get('db'),
             fact_id
@@ -66,6 +73,7 @@ FactsRouter
         .catch(next);
     })
     .patch(jsonBodyParser, (req, res, next) => {
+
         const {
             title, 
             user_id,

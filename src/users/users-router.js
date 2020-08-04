@@ -10,13 +10,15 @@ const UsersService = require('./users-service');
 UsersRouter
     .route('/')
     .get((req, res, next) => {
-        UsersService.getAllUsers(
+
+      UsersService.getAllUsers(
             req.app.get('db')
         )
         .then(user => {
             res.json(user.map(UsersService.serializeUser))
         })
         .catch(next)
+
     })
 
     module.exports = UsersRouter;

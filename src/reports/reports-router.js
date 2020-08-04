@@ -13,6 +13,7 @@ const FactsService = require('../facts/facts-service');
 ReportsRouter
     .route('/')
     .get((req, res, next) => {
+
         ReportsService.getReports(
             req.app.get('db')
         )
@@ -20,8 +21,10 @@ ReportsRouter
             res.json(ReportsService.removeDupesReduce(report))
         })
         .catch(next)
+
     })
     .post(jsonBodyParser, (req, res, next) => {
+
         const { fact_id } = req.body;
         const newReport = { 
             fact_id: fact_id, 
@@ -73,6 +76,7 @@ ReportsRouter
     .route('/id/:report_id')
     .all(checkReportExists)
     .get((req, res, next) => {
+
         ReportsService.getReportById(
             req.app.get('db'),
             req.params.report_id
@@ -81,6 +85,7 @@ ReportsRouter
             res.json(report)
         })
         .catch(next)
+
     })
     .patch(jsonBodyParser, (req, res, next) => {
 
@@ -106,12 +111,9 @@ ReportsRouter
                     })
             })
 
-        }
-
-        catch(err) {
+        } catch(err) {
             console.log(err)
             next();
-
         }
 
     });

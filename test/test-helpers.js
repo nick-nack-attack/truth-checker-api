@@ -50,7 +50,8 @@ function makeFacts() {
             text: 'During the day',
             user_id: 2,
             status: 'Pending',
-            date_submitted: '2020-06-01T01:55:48.000Z'
+            date_submitted: '2020-06-01T01:55:48.000Z',
+            serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62'
         }, 
         {
             fact_id: 2,
@@ -59,7 +60,8 @@ function makeFacts() {
             user_id: 2,
             status: 'Under Review',
             date_submitted: '2020-06-01T01:55:48.000Z',
-            date_under_review: '2020-06-02T01:55:48.000Z'
+            date_under_review: '2020-06-02T01:55:48.000Z',
+            serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62'
         }, 
         {
             fact_id: 3,
@@ -69,7 +71,8 @@ function makeFacts() {
             status: 'Approved',
             date_submitted: '2020-06-01T01:55:48.000Z',
             date_under_review: '2020-06-02T01:55:48.000Z',
-            date_approved: '2020-06-03T01:55:48.000Z'
+            date_approved: '2020-06-03T01:55:48.000Z',
+            serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62'
         }, 
         {
             fact_id: 4,
@@ -79,7 +82,8 @@ function makeFacts() {
             status: 'Not True',
             date_submitted: '2020-06-01T01:55:48.000Z',
             date_under_review: '2020-02-05T01:55:48.000Z',
-            date_not_true: '2020-06-03T01:55:48.000Z'
+            date_not_true: '2020-06-03T01:55:48.000Z',
+            serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62'
         }
     ];
 };
@@ -148,6 +152,7 @@ function makeExpectedFact(fact) {
         text: fact.text,
         user_id: fact.user_id,
         status: fact.status,
+        serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62',
         date_submitted: fact.date_submitted,
         date_under_review: null,
         date_approved: null,
@@ -207,13 +212,7 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
 
 module.exports = {
     cleanTables,
-    makeUsers,
-    makeFacts,
-    makeReports,
     seedTables,
     makeExpectedFact,
-    makeExpectedReport,
-    makeMaliciousFact,
-    makeFixtures,
-    makeAuthHeader
+    makeFixtures
 };

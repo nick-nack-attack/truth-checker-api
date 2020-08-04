@@ -28,14 +28,14 @@ const AuthService = {
 
     getUserWithEmail: (db, email) => {
         return db('users')
-        .where({ email })
-        .first()
+            .where({ email })
+            .first()
     },
 
     parseBasicToken: (token) => {
         return Buffer
             .from(token, 'base64')
-            .toSpring()
+            .toString()
             .split(':')
     },
 

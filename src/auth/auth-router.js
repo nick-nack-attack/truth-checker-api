@@ -9,21 +9,20 @@ const AuthService = require('./auth-service');
 
 AuthRouter
     .post('/login', jsonBodyParser, (req, res, next) => {
+
         const { email, password } = req.body;
         const loginUser = { email, password };
 
         // verify email and password are in request body
         for (const [key, value] of Object.entries(loginUser)) {
             if (value == null) {
-                return (
-                    res
-                        .status(400)
-                        .json({
-                            error: `Missing ${key} in request body`
-                        })
-                );
-            };
-        };
+                return res
+                    .status(400)
+                    .json({
+                        error: `Missing ${key} in request body`
+                    })
+            }
+        }
     
         AuthService.getUserWithEmail(
             req.app.get('db'),
@@ -73,6 +72,7 @@ AuthRouter
 
 AuthRouter
     .post('/refresh', requireAuth, (req, res) => {
+
         const sub = req.user.email
         const payload = { user_id: req.user.user_id }
         const user_id = payload.user_id

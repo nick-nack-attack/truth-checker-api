@@ -14,7 +14,7 @@ function requireAuth(req, res, next) {
         } else {
         // slice off 'bearer ' from the token
         bearerToken = authToken.slice(7, authToken.length)
-    };
+    }
 
     try {
         const payload = AuthService.verifyJwt(bearerToken)
@@ -31,7 +31,7 @@ function requireAuth(req, res, next) {
                                 error: 'Unauthorized request' 
                             })
                     );
-                };
+                }
                 req.user = user;
                 next();
             })
@@ -46,8 +46,8 @@ function requireAuth(req, res, next) {
             .json({ 
                 error: 'Unauthorized request' 
             })
-    };
-};
+    }
+}
 
 module.exports = {
     requireAuth

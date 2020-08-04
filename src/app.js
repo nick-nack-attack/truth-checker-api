@@ -47,7 +47,7 @@ app.use('/api/reports', ReportsRouter);
       console.error('SOMETHING WENT WRONG!', error)
       response = { message: error.message, error }
     }
-    res.status(500).json(response)
+    res.status(500).json(response);
  };
 
  app.use(errorHandler);
