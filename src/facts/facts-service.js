@@ -1,5 +1,4 @@
 const xss = require('xss');
-const { uuid4 } = require('uuid4');
 const { format } = require('date-fns');
 
 const FactsService = {
@@ -30,10 +29,7 @@ const FactsService = {
             .insert(fact)
             .into('facts')
             .returning('*')
-            .then(([fact]) => fact)
-            .then(fact =>
-                FactsService.getFactById(db, fact.fact_id)    
-            )
+            .then(([returnedFact]) => returnedFact)
     },
 
     updateFact: (db, fact_id, fields) => {

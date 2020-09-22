@@ -11,11 +11,9 @@ UsersRouter
     .route('/')
     .get((req, res, next) => {
 
-      UsersService.getAllUsers(
-            req.app.get('db')
-        )
-        .then(user => {
-            res.json(user.map(UsersService.serializeUser))
+      UsersService.getAllUsers(req.app.get('db'))
+        .then(listOfUsers => {
+            res.json(listOfUsers.map(UsersService.serializeUser))
         })
         .catch(next)
 
