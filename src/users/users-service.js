@@ -9,6 +9,12 @@ const UsersService = {
             .select('*')
     },
 
+    getUserEmail: (db, email) => {
+        return db
+            .from('users')
+            .where('email', email)
+    },
+
     // prevent malicious attacks by form submissions
     serializeUser(user) {
         return {
