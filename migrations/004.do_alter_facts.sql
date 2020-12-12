@@ -1,1 +1,3 @@
-ALTER TABLE facts ADD COLUMN "serial" text;
+ALTER TABLE facts
+    ADD COLUMN "serial" text;
+    ADD COLUMN "text" TEXT;
