@@ -18,4 +18,9 @@ UsersRouter
         })
         .catch(next)
     })
+    .post(requireAuth, (req, res, next) => {
+
+    })
     module.exports = UsersRouter;
+
+    // test
