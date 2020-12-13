@@ -12,3 +12,9 @@ const supertest = require('supertest');
 
 global.expect = expect;
 global.supertest = supertest;
+
+// password not longer than 8 characters
+// password longer than 72 characters
+// password starts with space
+// password ends with space
+// email already exists
