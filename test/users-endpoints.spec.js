@@ -4,7 +4,7 @@ const helpers = require('./test-helpers');
 const { expect } = require('chai');
 const supertest = require('supertest');
 
-describe(`user endpoints`, () => {
+describe.only(`user endpoints`, () => {
     // initialize database
     let db;
     // create fixtures
@@ -60,5 +60,47 @@ describe(`user endpoints`, () => {
             })
 
         })
-    })
+
+    describe(`POST /api/users`, () => {
+        // context 1: no users in db
+        context(`no users in db`, () => {
+            beforeEach(`seed db`, () => {
+                return (
+                    helpers.seedTables(
+                        db,
+                        [],
+                        [],
+                        []
+                    )
+                );
+            });
+
+            it (`responds 201 + new user`, () => {
+                const newUser = {
+                    role: 'End-User',
+                    email: "newUser@gmail.com",
+                    password: "Password"
+                }
+
+                // post to users
+                // send the user
+                // expect user created with code 201
+                return (
+                    supertest(app)
+                        .post(`/api/users`)
+                        .send(newUser)
+                        .expect(201)
+                        .expect(res => {
+                            expect(res.body).to.have.property('user_id', 'email');
+                            expect(res.headers.location).to.eql(`api/users/1`);
+                        })
+                )
+            });
+
+
+        });
+        
+        // context 2: user in db
+    });
+})
 
