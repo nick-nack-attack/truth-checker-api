@@ -1,5 +1,6 @@
 // Users Router
 const { Router } = require('express');
+const { requireAuth } = require('../middleware/jwt-auth');
 const UsersRouter = Router();
 
 // service
@@ -16,7 +17,5 @@ UsersRouter
             res.json(listOfUsers.map(UsersService.serializeUser))
         })
         .catch(next)
-
     })
-
     module.exports = UsersRouter;
