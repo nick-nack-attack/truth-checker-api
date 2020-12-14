@@ -38,37 +38,38 @@ UsersRouter
         const passwordError = UsersService.validatePassword(password);
         if (passwordError)
           return res.status(400).json({ error: passwordError});
-
-        UsersService.hasUserWithEmail(
-          req.app.get('db'),
-          email
-        ) 
-        .then(hasUserWithEmail => {
-          console.log('hasUserWithEmail::', hasUserWithEmail)
-          if (hasUserWithEmail)
-            return res.status(400).json({ error: `Email already exists` });
           
-          return UsersService.hashPassword(password)
-          .then(hashedPassword => {
-              const newUser = {
-                  role,
-                  email,
-                  password: hashedPassword,
-                  date_created: 'now()',
-              }
+          console.log('sending email::', email)
+          UsersService.hasUserWithEmail(
+            req.app.get('db'),
+            email
+          ) 
+          .then(hasUserWithEmail => {
+            console.log('hasUserWithEmail::', hasUserWithEmail)
+            if (hasUserWithEmail)
+              return res.status(400).json({ error: `Email already exists` });
+            
+            return UsersService.hashPassword(password)
+            .then(hashedPassword => {
+                const newUser = {
+                    role,
+                    email,
+                    password: hashedPassword,
+                    date_created: 'now()',
+                }
 
-              return UsersService.insertUser(
-                  req.app.get('db'),
-                  newUser
-              )
-              .then(user => {
-                  res
-                      .status(201)
-                      .location(path.posix.join(req.originalUrl, `/${user.user_id}`))
-                      .json(UsersService.serializeUser(user));
-              });
-          });
-        })
+                return UsersService.insertUser(
+                    req.app.get('db'),
+                    newUser
+                )
+                .then(user => {
+                    res
+                        .status(201)
+                        .location(path.posix.join(req.originalUrl, `/${user.user_id}`))
+                        .json(UsersService.serializeUser(user));
+                });
+            });
+          })
         .catch(next);
     });
     module.exports = UsersRouter;

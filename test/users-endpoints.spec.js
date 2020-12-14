@@ -156,10 +156,11 @@ describe.only(`user endpoints`, () => {
 
             it(`responds error 400 + 'Email already exists'`, () => {
                 const userExists = {
-                    role: 'End-User',
+                    role: 'Admin',
                     email: testUser.email,
                     password: testUser.password
                 };
+                console.log('sending userExists::', userExists);
                 return supertest(app)
                     .post('/api/users')
                     .send(userExists)
