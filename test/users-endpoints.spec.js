@@ -83,7 +83,7 @@ describe.only(`user endpoints`, () => {
                 it(`responds error 400 and 'Missing ${field} in request body'`, () => {
                     delete registerAttemptBody[field];
                     return supertest(app)
-                        .post('/api/user')
+                        .post('/api/users')
                         .send(registerAttemptBody)
                         .expect(
                             400,
@@ -99,7 +99,7 @@ describe.only(`user endpoints`, () => {
                     password: '12345'
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userShortPassword)
                     .expect(
                         400,
@@ -113,7 +113,7 @@ describe.only(`user endpoints`, () => {
                     password: '*'.repeat(100)
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userLongPassword)
                     .expect(
                         400,
@@ -127,11 +127,11 @@ describe.only(`user endpoints`, () => {
                     password: ' Password'
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userPasswordStartsWithSpace)
                     .expect(
                         400,
-                        { error: 'Password cannot be longer than 72 characters' }
+                        { error: 'Password cannot start with a space' }
                     )
             })
 
@@ -141,11 +141,11 @@ describe.only(`user endpoints`, () => {
                     password: 'Password '
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userPasswordEndsWithSpace)
                     .expect(
                         400,
-                        { error: 'Password cannot be longer than 72 characters' }
+                        { error: 'Password cannot end with a space' }
                     )
             })
 
@@ -155,7 +155,7 @@ describe.only(`user endpoints`, () => {
                     password: testUser.password
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userExists)
                     .expect(
                         400,
