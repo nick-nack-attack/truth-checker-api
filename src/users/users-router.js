@@ -1,7 +1,10 @@
 // Users Router
+const path = require('path');
+const express = require('express');
 const { Router } = require('express');
 const { requireAuth } = require('../middleware/jwt-auth');
 const UsersRouter = Router();
+const jsonParser = express.json();
 
 // service
 const UsersService = require('./users-service');
@@ -10,16 +13,21 @@ const UsersService = require('./users-service');
 // for testing purposes
 UsersRouter
     .route('/')
-    .get((req, res, next) => {
-      UsersService.getAllUsers(req.app.get('db'))
-        .then(listOfUsers => {
-            res.json(listOfUsers.map(UsersService.serializeUser))
-        })
-        .catch(next)
+    .get(requireAuth, (req, res, next) => {
+      if (req.user.role === 'Admin') {
+        return UsersService.getAllUsers(req.app.get('db'))
+          .then(listOfUsers => {
+              res.json(listOfUsers.map(UsersService.serializeUser))
+          })
+          .catch(next)
+      }
+      return 'Admin required';
     })
 
-    .post('/', (req, res, next) => {
+    .post(jsonParser, (req, res, next) => {
       const { role, email, password } = req.body;
+
+      console.log('req.body::', req.body);
 
       for (const field of ['role', 'email', 'password'])
         if(!req.body[field])
@@ -35,9 +43,10 @@ UsersRouter
           req.app.get('db'),
           email
         ) 
-        .then(hasUserWithUserName => {
-          if (hasUserWithUserName)
-                  return res.status(400).json({ error: `Email already exists` });
+        .then(hasUserWithEmail => {
+          console.log('hasUserWithEmail::', hasUserWithEmail)
+          if (hasUserWithEmail)
+            return res.status(400).json({ error: `Email already exists` });
           
           return UsersService.hashPassword(password)
           .then(hashedPassword => {

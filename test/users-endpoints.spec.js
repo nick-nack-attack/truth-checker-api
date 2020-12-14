@@ -65,17 +65,18 @@ describe.only(`user endpoints`, () => {
 
         })
 
-    describe(`POST /api/users`, () => {
+    describe.only(`POST /api/users`, () => {
 
         context(`users ARE in db`, () => {
 
             beforeEach('seed db', () => helpers.seedTables( db, testUsers, [], [] ))
 
-            const requiredFields = ['email', 'password'];
+            const requiredFields = ['role', 'email', 'password'];
 
             requiredFields.forEach(field => {
 
                 const registerAttemptBody = {
+                    role: 'End-User',
                     email: 'testuser@email.com',
                     password: 'Password'
                 };
@@ -95,6 +96,7 @@ describe.only(`user endpoints`, () => {
 
             it(`responds error 400 + 'Password must be longer than 8 characters'`, () => {
                 const userShortPassword = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: '12345'
                 };
@@ -109,6 +111,7 @@ describe.only(`user endpoints`, () => {
 
             it(`responds error 400 + 'Password cannot be longer than 72 characters'`, () => {
                 const userLongPassword = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: '*'.repeat(100)
                 };
@@ -123,6 +126,7 @@ describe.only(`user endpoints`, () => {
 
             it(`responds error 400 + 'Password cannot start with a space'`, () => {
                 const userPasswordStartsWithSpace = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: ' Password'
                 };
@@ -137,6 +141,7 @@ describe.only(`user endpoints`, () => {
 
             it(`responds error 400 + 'Password cannot end with a space'`, () => {
                 const userPasswordEndsWithSpace = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: 'Password '
                 };
@@ -151,6 +156,7 @@ describe.only(`user endpoints`, () => {
 
             it(`responds error 400 + 'Email already exists'`, () => {
                 const userExists = {
+                    role: 'End-User',
                     email: testUser.email,
                     password: testUser.password
                 };
@@ -184,6 +190,7 @@ describe.only(`user endpoints`, () => {
                     .expect(201)
                     .expect(res => {
                         expect(res.body).to.have.property('user_id')
+                        expect(res.body).to.have.property('role')
                         expect(res.body.email).to.eql(newUser.email)
                         expect(res.body).to.not.have.property('password')
                         expect(res.headers.location).to.eql(`/api/users/${res.body.user_id}`)

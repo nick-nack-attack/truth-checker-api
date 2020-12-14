@@ -112,6 +112,7 @@ function makeReports() {
 };
 
 function seedTables(db, users, facts, reports) {
+
     return db.transaction(async trx => {
 
         if (users.length > 0) {

@@ -35,8 +35,8 @@ const UsersService = {
     hashPassword(pw) {
         return bcrypt.hash(pw, 12);
     },
-
     hasUserWithEmail(db, email) {
+        console.log('checkingEmail::', email)
         return db('users')
             .where({ email })
             .first()
@@ -46,7 +46,7 @@ const UsersService = {
     serializeUser(user) {
         return {
             user_id: user.user_id,
-            role: user.role,
+            role: xss(user.role),
             email: xss(user.email),
             password: xss(user.password),
             date_created: user.date_created
