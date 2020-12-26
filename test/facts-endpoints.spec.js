@@ -1,9 +1,12 @@
-const app = require('../src/app');
-const knex = require('knex');
+const app = require('../src/server');
+const { testDb } = require('../src/database/connect');
+
 const helpers = require('./test-helpers');
+const knex = require("knex");
+const { describe } = require("mocha");
 const { expect } = require('chai');
 
-describe(`facts endpoints`, () => {
+describe.only(`facts endpoints`, () => {
 
     let db;
 
@@ -12,18 +15,14 @@ describe(`facts endpoints`, () => {
         testUsers,
         testFacts
     } = helpers.makeFixtures();
-    
-    // make knex instance
+
     before(`make knex instance`, () => {
-        db = knex({
-            client: 'pg',
-            connection: process.env.TEST_DATABASE_URL
-        });
+        db = testDb;
         app.set('db', db);
     });
-    after(`disconnect from database`, () => {db.destroy()});
-    before(`truncate db and restart idents`, () => {helpers.cleanTables(db)});
-    afterEach(`truncate db and restart idents`, () => {helpers.cleanTables(db)});
+    after(`disconnect from database`, () => { db.destroy() });
+    beforeEach(`truncate db and restart idents`, () => { helpers.cleanTables() });
+    afterEach(`truncate db and restart idents`, () => { helpers.cleanTables() });
 
     describe(`GET /api/facts`, () => {
 
@@ -32,7 +31,6 @@ describe(`facts endpoints`, () => {
             beforeEach('seed db', () => {
                 return (
                     helpers.seedTables(
-                        db,
                         testUsers,
                         [],
                         []
@@ -40,7 +38,9 @@ describe(`facts endpoints`, () => {
                 );
             })
 
-            it(`responds 200 + empty array`, () => {
+            it.only(`responds 200 + empty array`, () => {
+                console.log( 'testUsers are ' + testUsers[0] );
+                console.log( 'testFacts: ' + testFacts[0] );
                 return (
                     supertest(app)
                         .get(`/api/facts`)                        
@@ -53,7 +53,6 @@ describe(`facts endpoints`, () => {
 
             beforeEach(`seed db`, () => 
                 helpers.seedTables(
-                    db,
                     testUsers,
                     testFacts,
                     []
@@ -69,12 +68,13 @@ describe(`facts endpoints`, () => {
                                 helpers.makeExpectedFact(fact)
                             );
                         });
+
                         return (
                             supertest(app)
                                 .get(`/api/facts/id/${testFacts[0].fact_id}`)
                                 .expect(200, expectedFacts[0])
-                                
                         );
+
             });
 
         });
@@ -87,7 +87,6 @@ describe(`facts endpoints`, () => {
 
             beforeEach(`seed db`, () =>
                 helpers.seedTables(
-                    db,
                     testUsers,
                     [],
                     []
@@ -112,7 +111,6 @@ describe(`facts endpoints`, () => {
 
             beforeEach(`seed database`, () =>
                 helpers.seedTables(
-                    db,
                     testUsers,
                     testFacts,
                     []
@@ -141,7 +139,6 @@ describe(`facts endpoints`, () => {
             beforeEach(`seed db`, () => {
                 return (
                     helpers.seedTables(
-                        db,
                         testUsers,
                         [],
                         []
@@ -180,7 +177,6 @@ describe(`facts endpoints`, () => {
             beforeEach(`seed db`, () => {
                 return (
                     helpers.seedTables(
-                        db,
                         testUsers,
                         testFacts,
                         []
@@ -224,7 +220,6 @@ describe(`facts endpoints`, () => {
             beforeEach(`seed db`, () => {
                 return (
                     helpers.seedTables(
-                        db,
                         [],
                         [],
                         []
@@ -250,7 +245,6 @@ describe(`facts endpoints`, () => {
             beforeEach(`seed db`, () => {
                 return (
                     helpers.seedTables(
-                        db,
                         testUsers,
                         testFacts,
                         []
@@ -283,7 +277,6 @@ describe(`facts endpoints`, () => {
         beforeEach(`seed db`, () => {
             return (
                 helpers.seedTables(
-                    db,
                     testUsers,
                     testFacts,
                     []

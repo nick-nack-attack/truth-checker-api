@@ -1,16 +1,17 @@
 // Users Service
 const xss = require('xss');
+const { db } = require('../database/connect');
 
 const UsersService = {
 
-    getAllUsers(db) {
+    getAllUsers: () => {
         return db
             .from('users')
             .select('*')
     },
 
     // prevent malicious attacks by form submissions
-    serializeUser(user) {
+    serializeUser: (user) => {
         return {
             user_id: user.user_id,
             role: user.role,

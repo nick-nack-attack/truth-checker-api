@@ -1,10 +1,12 @@
-const app = require('../src/app');
-const knex = require('knex');
+const app = require('../src/server');
+const { testDb } = require('../src/database/connect');
+
 const helpers = require('./test-helpers');
 const { expect } = require('chai');
 const supertest = require('supertest');
+const { describe } = require("mocha");
 
-describe.only(`user endpoints`, () => {
+describe(`user endpoints`, () => {
 
     // initialize database
     let db;
@@ -14,16 +16,10 @@ describe.only(`user endpoints`, () => {
     const testUser = testUsers[0];
 
     // make knex instance
-    before(`make knex instance`, () => {
-        db = knex({
-            client: 'pg',
-            connection: process.env.TEST_DATABASE_URL
-        });
-        app.set('db', db);
-    })
-    after(`disconnect from db`, () => { db.destroy() });
-    beforeEach(`truncate db and restart idents`, () => { helpers.cleanTables(db) });
-    afterEach(`truncate db and restart idents`, () => { helpers.cleanTables(db) });
+    before(`make test db knex instance`, () => db = testDb )
+    after(`disconnect from test db`, () =>  db.destroy() );
+    beforeEach(`truncate database and restart idents`, () => helpers.cleanTables(db) );
+    afterEach(`truncate db and restart idents`, () => helpers.cleanTables(db) );
 
     describe(`GET /api/users`, () => {
         // context 1
@@ -166,7 +162,6 @@ describe.only(`user endpoints`, () => {
             it(`responds code 201 + serialized user + stored bcrypt password`, () => {
                 // create a test user
                 const newUser = {
-                    role: 'End-User',
                     email: 'new_user@gmail.com',
                     password: 'Password'
                 };
@@ -183,7 +178,20 @@ describe.only(`user endpoints`, () => {
                     .send(newUser)
                     .expect(201)
                     .expect(res => {
-                        expect(res.body).to.have.property('user_id')
+                        expect(res.body).to.have.property(
+                            'user_id',
+                            'gender',
+                            'full_name',
+                            'address',
+                            'latitude',
+                            'longitude',
+                            'uuid',
+                            'inbox',
+                            'date_of_birth',
+                            'phone',
+                            'ssn',
+                            'photo_url'
+                        )
                         expect(res.body.email).to.eql(newUser.email)
                         expect(res.body).to.not.have.property('password')
                         expect(res.headers.location).to.eql(`/api/users/${res.body.user_id}`)

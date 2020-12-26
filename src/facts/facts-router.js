@@ -1,19 +1,23 @@
 // Facts Router
-const {Router, json} = require("express")
+
+// variables
+const { Router, json } = require("express")
 const FactsRouter = Router();
 const jsonBodyParser = json();
 const path = require("path");
 
-// service
+// services
+const { checkForMissingValue } = require("../middleware/check-for-missing-value");
+const { checkFactExists } = require('../middleware/check-if-exists');
 const FactsService = require("./facts-service");
 const uuid4 = require("uuid4");
 
+// router
 FactsRouter
     .route('/')
     .get((req, res, next) => {
-      FactsService.getAllFacts(
-          req.app.get('db')
-      )
+      FactsService
+          .getAllFacts()
           .then(fact => {
             res.json(fact.map(FactsService.serializeFact))
           })
@@ -21,27 +25,18 @@ FactsRouter
     })
     .post(jsonBodyParser, (req, res, next) => {
 
-      const {title, user_id} = req.body;
-      const date_submitted = new Date();
-      // newly submitted facts default to status 'Pending'
-      const status = 'Pending';
-      const serial = uuid4();
+        // set variables from request body
+        const { title, user_id } = req.body;
+        const date_submitted = new Date();
+        const status = 'Pending'; // newly submitted facts default to status 'Pending'
+        const serial = uuid4();
+        const newFact = { title, user_id, status, date_submitted, serial };
 
-      const newFact = {title, user_id, status, date_submitted, serial};
+      // async function to check if a value is missing
+      checkForMissingValue(newFact, res);
 
-      // if a value is missing from the request body then return error
-      for (const [key, value] of Object.entries(newFact))
-        if (value === undefined || value === null)
-          return res
-              .status(400)
-              .json({
-                error: `Missing ${key} in request`
-              })
-
-      FactsService.insertFact(
-          req.app.get('db'),
-          newFact
-      )
+      FactsService
+          .insertFact(newFact)
           .then(fact => {
             res.status(201)
                 .location(path.posix.join(req.originalUrl, `/id/${fact.fact_id}`)) // alt .location(`/api/facts/id/${fact.fact_id}`)
@@ -52,7 +47,7 @@ FactsRouter
 
 FactsRouter
     .route('/id/:fact_id')
-    .all(checkFactExist)
+    .all(checkFactExists)
     .get((req, res, next) => {
       return FactsService.serializeFact(res.json(res.fact))
     })
@@ -60,10 +55,8 @@ FactsRouter
 
       const {fact_id} = req.params;
 
-      FactsService.deleteFact(
-          req.app.get('db'),
-          fact_id
-      )
+      FactsService
+          .deleteFact(fact_id)
           .then(() => {
             return (
                 res
@@ -131,7 +124,6 @@ FactsRouter
 
 
       FactsService.updateFact(
-          req.app.get('db'),
           fact_id,
           fact
       )
@@ -146,29 +138,5 @@ FactsRouter
           })
 
     })
-
-// check to see if the fact exists
-async function checkFactExist(req, res, next) {
-  const knexInst = req.app.get('db');
-  try {
-    const fact = await FactsService.getFactById(
-        knexInst,
-        req.params.fact_id
-    )
-    if (!fact) {
-      return res
-          .status(404)
-          .json({
-            error: `Fact doesn't exist`
-          })
-    } else {
-      res.fact = fact;
-      next();
-    }
-  } catch (error) {
-    next(error);
-  }
-
-}
 
 module.exports = FactsRouter;

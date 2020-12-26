@@ -24,10 +24,7 @@ AuthRouter
             }
         }
     
-        AuthService.getUserWithEmail(
-            req.app.get('db'),
-            loginUser.email
-        )
+        AuthService.getUserWithEmail(loginUser.email)
             .then(dbUser => {
                 if (!dbUser) {
                     // if the user doesn't exist, return error
@@ -38,7 +35,8 @@ AuthRouter
                         })
                 }
                 return AuthService.comparePasswords(
-                    loginUser.password, dbUser.password
+                    loginUser.password,
+                    dbUser.password
                 )
                 .then(result => {
                     if (!result) {
@@ -58,7 +56,7 @@ AuthRouter
                             authToken: AuthService.createJwt( sub, payload ),
                             user_id
                         })
-                    } catch(error) {
+                    } catch (error) {
                         return res
                             .sendStatus(500)
                             .json({ 

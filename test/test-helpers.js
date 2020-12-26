@@ -1,30 +1,33 @@
+// test helpers
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { testDb } = require("../src/database/connect");
 
 // Truncate all tables and restart identities for database
-function cleanTables(db) {
-    return db.transaction(trx =>
+const cleanTables = () => {
+    return testDb.transaction(trx =>
         trx.raw(
             `TRUNCATE
                 users,
                 facts,
                 reports RESTART IDENTITY CASCADE`
         )
-        .then(() => 
-            Promise.all([
-                trx.raw(`ALTER SEQUENCE users_user_id_seq minvalue 0 START WITH 1`),
-                trx.raw(`ALTER SEQUENCE facts_fact_id_seq minvalue 0 START WITH 1`),
-                trx.raw(`ALTER SEQUENCE reports_report_id_seq minvalue 0 START WITH 1`),
-                trx.raw(`SELECT setval('users_user_id_seq', 0)`),
-                trx.raw(`SELECT setval('facts_fact_id_seq', 0)`),
-                trx.raw(`SELECT setval('reports_report_id_seq', 0)`)
-            ])
-        )
-    );
+            .then(() =>
+                Promise.all([
+                    trx.raw(`ALTER SEQUENCE users_user_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`ALTER SEQUENCE facts_fact_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`ALTER SEQUENCE reports_report_id_seq minvalue 0 START WITH 1`),
+                    trx.raw(`SELECT setval('users_user_id_seq', 0)`),
+                    trx.raw(`SELECT setval('facts_fact_id_seq', 0)`),
+                    trx.raw(`SELECT setval('reports_report_id_seq', 0)`)
+                ])
+            )
+    )
 };
 
 // Create dummy users
-function makeUsers() {
+const makeUsers = () => {
     return [
         {
             user_id: 1,
@@ -42,7 +45,7 @@ function makeUsers() {
 };
 
 // Create dummy facts
-function makeFacts() {
+const makeFacts = () => {
     return [
         {
             fact_id: 1,
@@ -88,7 +91,7 @@ function makeFacts() {
     ];
 };
 
-function makeReports() {
+const makeReports = () => {
     return [
         {
             report_id: 1,
@@ -111,8 +114,8 @@ function makeReports() {
     ]
 };
 
-function seedTables(db, users, facts, reports) {
-    return db.transaction(async trx => {
+const seedTables = (users, facts, reports) => {
+    return testDb.transaction(async trx => {
 
         if (users.length > 0) {
             const preppedUsers = users.map(user => ({
@@ -124,7 +127,7 @@ function seedTables(db, users, facts, reports) {
                 `SELECT setval('users_user_id_seq', ?)`,
                 [users[users.length - 1].user_id]
             );
-        };
+        }
 
         if (facts.length > 0) {
             await trx.into('facts').insert(facts);
@@ -132,7 +135,7 @@ function seedTables(db, users, facts, reports) {
                 `SELECT setval('facts_fact_id_seq', ?)`,
                 [facts[facts.length - 1].fact_id]
             );
-        };
+        }
 
         if (reports.length > 0) {
             await trx.into('reports').insert(reports);
@@ -140,12 +143,12 @@ function seedTables(db, users, facts, reports) {
                 `SELECT setval('reports_report_id_seq', ?)`,
                 [reports[reports.length - 1].report_id]
             );
-        };
+        }
         
     });
 };
 
-function makeExpectedFact(fact) {
+const makeExpectedFact = fact => {
     return {
         fact_id: fact.fact_id,
         title: fact.title,
@@ -160,7 +163,7 @@ function makeExpectedFact(fact) {
     };
 };
 
-function makeExpectedReport(report) {
+const makeExpectedReport = report => {
     return {
         report_id: report.report_id,
         fact_id: report.fact_id,
@@ -169,7 +172,7 @@ function makeExpectedReport(report) {
     };
 };
 
-function makeMaliciousFact(person) {
+const makeMaliciousFact = person => {
     const maliciousFact = {
         title: 'Naughty naughty very naughty <script>alert("xss");</script>',
         text: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
@@ -187,7 +190,7 @@ function makeMaliciousFact(person) {
     };
 };
 
-function makeFixtures() {
+const makeFixtures = () => {
     const testUsers = makeUsers();
     const testFacts = makeFacts();
     const testReports = makeReports();
@@ -198,7 +201,7 @@ function makeFixtures() {
     };
 };
 
-function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+const makeAuthHeader = (user, secret = process.env.JWT_SECRET) => {
     const token = jwt.sign(
         { user_id: user.user_id },
         secret,

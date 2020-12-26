@@ -1,6 +1,6 @@
-const app = require('../src/app')
+const app = require('../src/server');
 
-describe('app tests', () => {
+describe('server app tests', () => {
 
     it('GET / responds with 200 + string', () => {
         return supertest(app)

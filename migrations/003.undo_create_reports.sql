@@ -1,1 +1,3 @@
 DROP TABLE IF EXISTS reports CASCADE;
+
+DROP TYPE IF EXISTS report_status;
