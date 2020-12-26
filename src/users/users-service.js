@@ -1,26 +1,23 @@
 // Users Service
-const xss = require('xss');
-const { db } = require('../database/connect');
+const xss       = require('xss');
+const { db }    = require('../database/connect');
 
 const UsersService = {
-<<<<<<< HEAD
 
-    getAllUsers: () => {
-=======
-    getAllUsers(db) {
->>>>>>> 3a9de68416b8357fb97e288b6b64f04d8ca27472
+    getAllUsers: (db) => {
+
         return db
             .from('users')
             .select('*')
     },
-    insertUser(db, newUser) {
+    insertUser: (newUser) => {
         return db
             .insert(newUser)
             .into('users')
             .return('*')
             .then(([user]) => user);
     },
-    validatePassword(password) {
+    validatePassword: (password) => {
         if (password.length < 8) {
             return 'Password must be longer than 8 characters';
         }
@@ -38,10 +35,10 @@ const UsersService = {
         }
         return null;
     },
-    hashPassword(pw) {
+    hashPassword: (pw) => {
         return bcrypt.hash(pw, 12);
     },
-    hasUserWithEmail(db, email) {
+    hasUserWithEmail: (email) => {
         console.log('checkingEmail::', email)
         return db('users')
             .where({ email })
