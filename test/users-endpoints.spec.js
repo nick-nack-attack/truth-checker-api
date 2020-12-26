@@ -61,17 +61,18 @@ describe(`user endpoints`, () => {
 
         })
 
-    describe(`POST /api/users`, () => {
+    describe.only(`POST /api/users`, () => {
 
         context(`users ARE in db`, () => {
 
             beforeEach('seed db', () => helpers.seedTables( db, testUsers, [], [] ))
 
-            const requiredFields = ['email', 'password'];
+            const requiredFields = ['role', 'email', 'password'];
 
             requiredFields.forEach(field => {
 
                 const registerAttemptBody = {
+                    role: 'End-User',
                     email: 'testuser@email.com',
                     password: 'Password'
                 };
@@ -79,7 +80,7 @@ describe(`user endpoints`, () => {
                 it(`responds error 400 and 'Missing ${field} in request body'`, () => {
                     delete registerAttemptBody[field];
                     return supertest(app)
-                        .post('/api/user')
+                        .post('/api/users')
                         .send(registerAttemptBody)
                         .expect(
                             400,
@@ -91,11 +92,12 @@ describe(`user endpoints`, () => {
 
             it(`responds error 400 + 'Password must be longer than 8 characters'`, () => {
                 const userShortPassword = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: '12345'
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userShortPassword)
                     .expect(
                         400,
@@ -105,11 +107,12 @@ describe(`user endpoints`, () => {
 
             it(`responds error 400 + 'Password cannot be longer than 72 characters'`, () => {
                 const userLongPassword = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: '*'.repeat(100)
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userLongPassword)
                     .expect(
                         400,
@@ -119,39 +122,42 @@ describe(`user endpoints`, () => {
 
             it(`responds error 400 + 'Password cannot start with a space'`, () => {
                 const userPasswordStartsWithSpace = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: ' Password'
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userPasswordStartsWithSpace)
                     .expect(
                         400,
-                        { error: 'Password cannot be longer than 72 characters' }
+                        { error: 'Password cannot start with a space' }
                     )
             })
 
             it(`responds error 400 + 'Password cannot end with a space'`, () => {
                 const userPasswordEndsWithSpace = {
+                    role: 'End-User',
                     email: 'testuser@gmail.com',
                     password: 'Password '
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userPasswordEndsWithSpace)
                     .expect(
                         400,
-                        { error: 'Password cannot be longer than 72 characters' }
+                        { error: 'Password cannot end with a space' }
                     )
             })
 
             it(`responds error 400 + 'Email already exists'`, () => {
                 const userExists = {
+                    role: 'End-User',
                     email: testUser.email,
                     password: testUser.password
                 };
                 return supertest(app)
-                    .post('/api/user')
+                    .post('/api/users')
                     .send(userExists)
                     .expect(
                         400,
@@ -178,6 +184,7 @@ describe(`user endpoints`, () => {
                     .send(newUser)
                     .expect(201)
                     .expect(res => {
+<<<<<<< HEAD
                         expect(res.body).to.have.property(
                             'user_id',
                             'gender',
@@ -192,6 +199,10 @@ describe(`user endpoints`, () => {
                             'ssn',
                             'photo_url'
                         )
+=======
+                        expect(res.body).to.have.property('user_id')
+                        expect(res.body).to.have.property('role')
+>>>>>>> 3a9de68416b8357fb97e288b6b64f04d8ca27472
                         expect(res.body.email).to.eql(newUser.email)
                         expect(res.body).to.not.have.property('password')
                         expect(res.headers.location).to.eql(`/api/users/${res.body.user_id}`)

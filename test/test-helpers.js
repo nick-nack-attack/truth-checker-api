@@ -114,8 +114,14 @@ const makeReports = () => {
     ]
 };
 
+<<<<<<< HEAD
 const seedTables = (users, facts, reports) => {
     return testDb.transaction(async trx => {
+=======
+function seedTables(db, users, facts, reports) {
+
+    return db.transaction(async trx => {
+>>>>>>> 3a9de68416b8357fb97e288b6b64f04d8ca27472
 
         if (users.length > 0) {
             const preppedUsers = users.map(user => ({

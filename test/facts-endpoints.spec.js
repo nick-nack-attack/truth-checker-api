@@ -2,7 +2,6 @@ const app = require('../src/server');
 const { testDb } = require('../src/database/connect');
 
 const helpers = require('./test-helpers');
-const knex = require("knex");
 const { describe } = require("mocha");
 const { expect } = require('chai');
 
@@ -38,11 +37,9 @@ describe.only(`facts endpoints`, () => {
                 );
             })
 
-            it.only(`responds 200 + empty array`, () => {
-                console.log( 'testUsers are ' + testUsers[0] );
-                console.log( 'testFacts: ' + testFacts[0] );
+            it(`responds 200 + empty array`, () => {
                 return (
-                    supertest(app)
+                    supertest(app
                         .get(`/api/facts`)                        
                 );
             });
@@ -60,20 +57,12 @@ describe.only(`facts endpoints`, () => {
             );
 
             it(`responds 200 + all facts`, () => {
-                const expectedFacts =
-                    testFacts
-                        .filter(fact => fact.fact_id === testFacts[0].fact_id)
-                        .map(fact => {
-                            return (
-                                helpers.makeExpectedFact(fact)
-                            );
-                        });
-
-                        return (
-                            supertest(app)
-                                .get(`/api/facts/id/${testFacts[0].fact_id}`)
-                                .expect(200, expectedFacts[0])
-                        );
+                const expectedFact = helpers.makeExpectedFact(testFacts[0]);
+                    return (
+                        supertest(app)
+                            .get(`/api/facts/id/${testFacts[0].fact_id}`)
+                            .expect(200, expectedFact)
+                    )
 
             });
 
