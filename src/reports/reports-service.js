@@ -33,7 +33,7 @@ const ReportsService = {
             .groupBy('rpt.report_id', 'fct.fact_id')
     },
 
-    getReportById: report_id => {
+    getReportById: (report_id) => {
         return db
             .from('reports')
             .select('*')
@@ -41,7 +41,7 @@ const ReportsService = {
             .first()
     },
 
-    insertReport: report => {
+    insertReport: (report) => {
         return db
             .insert(report)
             .into('reports')
@@ -58,7 +58,7 @@ const ReportsService = {
     },
 
     // if the same fact is reported > 1, then return the fact with the number of times it's been reported
-    removeDupesReduce: arr => {
+    removeDupesReduce: (arr) => {
         let report = arr.reduce((acc, cur) => {
           let curFact = cur.reportedFact;
           if (!acc.hasOwnProperty(curFact.fact_id)) {
