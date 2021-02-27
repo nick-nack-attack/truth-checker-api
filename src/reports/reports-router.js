@@ -1,13 +1,13 @@
 // Reports router
-const { Router, json }          = require('express');
-const ReportsRouter             = Router();
-const jsonBodyParser            = json();
-const path                      = require('path');
+const { Router, json }      = require('express');
+const ReportsRouter         = Router();
+const jsonBodyParser        = json();
+const path                  = require('path');
 
 // services
-const ReportsService            = require('./reports-service');
-const FactsService              = require('../facts/facts-service');
-const { checkReportExists }     = require('../middleware/check-if-exists');
+const ReportsService        = require('./reports-service');
+const FactsService          = require('../facts/facts-service');
+const { checkReportExists } = require('../middleware/check-if-exists');
 
 // omitting auth middleware for initial mvp release
 
