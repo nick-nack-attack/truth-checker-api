@@ -184,7 +184,6 @@ describe(`user endpoints`, () => {
                     .send(newUser)
                     .expect(201)
                     .expect(res => {
-<<<<<<< HEAD
                         expect(res.body).to.have.property(
                             'user_id',
                             'gender',
@@ -199,10 +198,6 @@ describe(`user endpoints`, () => {
                             'ssn',
                             'photo_url'
                         )
-=======
-                        expect(res.body).to.have.property('user_id')
-                        expect(res.body).to.have.property('role')
->>>>>>> 3a9de68416b8357fb97e288b6b64f04d8ca27472
                         expect(res.body.email).to.eql(newUser.email)
                         expect(res.body).to.not.have.property('password')
                         expect(res.headers.location).to.eql(`/api/users/${res.body.user_id}`)
