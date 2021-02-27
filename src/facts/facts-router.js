@@ -96,7 +96,7 @@ FactsRouter
         date_not_true
       };
 
-      const fact_id = req.params.fact_id
+      const fact_id = req.params.fact_id;
 
       // remove any field that doesn't have a value (null)
       for (const [key, value] of Object.entries(fact)) {
@@ -122,19 +122,21 @@ FactsRouter
         )
       }
 
-
       FactsService.updateFact(
           fact_id,
           fact
       )
           .then(() => {
-            FactsService.getFactById(
-                req.app.get('db'),
-                fact_id
-            )
-                .then(fact => {
+            FactsService.getFactById(fact_id)
+              .then((fact) => {
                   return res.status(201).json(fact)
                 })
+              .catch((err) => {
+                console.log('Get Fact failed:', err)
+              })
+          })
+          .catch((err) => {
+            console.log('Update Fact failed:', err)
           })
 
     })

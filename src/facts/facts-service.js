@@ -4,7 +4,7 @@ const { db } = require('../database/connect');
 
 const FactsService = {
 
-    deleteFact: fact_id => {
+    deleteFact: (fact_id) => {
         return db
             .from('facts')
             .where('fact_id', fact_id)
@@ -17,7 +17,7 @@ const FactsService = {
             .select('*')
     },
 
-    getFactById: fact_id => {
+    getFactById: (fact_id) => {
         return db
             .from('facts')
             .select('*')
@@ -25,7 +25,7 @@ const FactsService = {
             .first()
     },
 
-    insertFact: fact => {
+    insertFact: (fact) => {
         return db
             .insert(fact)
             .into('facts')
@@ -40,7 +40,7 @@ const FactsService = {
             .update(fields)
     },
 
-    serializeFact: fact => {
+    serializeFact: (fact) => {
         const submitted = fact.date_submitted ? format(new Date(fact.date_submitted), 'yyyy-MM-dd') : null;
         const underReview = fact.date_under_review ? format(new Date(fact.date_under_review), 'yyyy-MM-dd') : null;
         const approved = fact.date_approved ? format(new Date(fact.date_approved), 'yyyy-MM-dd') : null;
