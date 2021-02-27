@@ -1,9 +1,9 @@
-const app = require('../src/server');
-const { testDb } = require('../src/database/connect');
+const app           = require('../src/server');
+const { testDb }    = require('../src/database/connect');
 
-const helpers = require('./test-helpers');
-const { describe } = require("mocha");
-const { expect } = require('chai');
+const helpers       = require('./test-helpers');
+const { describe }  = require("mocha");
+const { expect }    = require('chai');
 
 describe.only(`facts endpoints`, () => {
 
@@ -41,7 +41,7 @@ describe.only(`facts endpoints`, () => {
                 return (
                     supertest(app
                         .get(`/api/facts`)                        
-                );
+                ))
             });
 
         });

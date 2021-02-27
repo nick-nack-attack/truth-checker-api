@@ -1,10 +1,10 @@
-const app = require('../src/server');
-const { testDb } = require('../src/database/connect');
+const app           = require('../src/server');
+const { testDb }    = require('../src/database/connect');
 
-const helpers = require('./test-helpers');
-const { expect } = require('chai');
-const supertest = require('supertest');
-const { describe } = require("mocha");
+const helpers       = require('./test-helpers');
+const { expect }    = require('chai');
+const supertest     = require('supertest');
+const { describe }  = require("mocha");
 
 describe(`user endpoints`, () => {
 

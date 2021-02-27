@@ -1,8 +1,8 @@
 // handles connecting to the database
 
 // utilities
-const { DATABASE_URL } = require('../config');
-const knex =  require('knex');
+const { DATABASE_URL }  = require('../config');
+const knex              = require('knex');
 
 // database
 const db = knex({

@@ -1,6 +1,6 @@
 // if a value is missing from the request body then return error
-const FactsService = require('../facts/facts-service');
-const ReportsService = require("../reports/reports-service");
+const FactsService      = require('../facts/facts-service');
+const ReportsService    = require("../reports/reports-service");
 
 const checkFactExists = async (req, res, next) => {
     try {

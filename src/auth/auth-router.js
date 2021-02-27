@@ -1,8 +1,8 @@
 // Authentication Router
-const { Router, json } = require('express');
-const AuthRouter = Router();
-const jsonBodyParser = json();
-const { requireAuth } = require('../middleware/jwt-auth');
+const { Router, json }  = require('express');
+const AuthRouter        = Router();
+const jsonBodyParser    = json();
+const { requireAuth }   = require('../middleware/jwt-auth');
 
 // service
 const AuthService = require('./auth-service');

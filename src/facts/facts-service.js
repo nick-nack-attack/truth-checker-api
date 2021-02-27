@@ -1,6 +1,6 @@
-const xss = require('xss');
-const { format } = require('date-fns');
-const { db } = require('../database/connect');
+const xss           = require('xss');
+const { format }    = require('date-fns');
+const { db }        = require('../database/connect');
 
 const FactsService = {
 

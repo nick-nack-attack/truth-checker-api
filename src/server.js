@@ -4,20 +4,20 @@
 require('dotenv').config();
 
 const express = require('express');
-const app = express();
+const app     = express();
 
 // utilities
 const errorHandler = require('./middleware/error-handler');
 
 // configuration
-const { NODE_ENV, PORT } = require('./config');
-const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
+const { NODE_ENV, PORT }  = require('./config');
+const morganOption        = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 // middleware
 // const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-const helmet = require('helmet');
+const morgan  = require('morgan');
+const cors    = require('cors');
+const helmet  = require('helmet');
 
 // create express server
 // const app = express(); // const app = require('./app');
@@ -29,9 +29,9 @@ app.use(cors());
 app.use(helmet());
 
 // routers
-const UsersRouter = require('./users/users-router');
-const FactsRouter = require('./facts/facts-router');
-const AuthRouter = require('./auth/auth-router');
+const UsersRouter   = require('./users/users-router');
+const FactsRouter   = require('./facts/facts-router');
+const AuthRouter    = require('./auth/auth-router');
 const ReportsRouter = require('./reports/reports-router');
 
 // initialize routes

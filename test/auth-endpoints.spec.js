@@ -1,11 +1,11 @@
-const app = require('../src/server');
-const { testDb } = require('../src/database/connect');
+const app           = require('../src/server');
+const { testDb }    = require('../src/database/connect');
 
-const helpers = require('./test-helpers');
-const jwt = require('jsonwebtoken');
-const { expect } = require('chai');
-const supertest = require('supertest');
-const config = require('../src/config');
+const helpers       = require('./test-helpers');
+const jwt           = require('jsonwebtoken');
+const { expect }    = require('chai');
+const supertest     = require('supertest');
+const config        = require('../src/config');
 
 describe(`auth endpoints`, () => {
 

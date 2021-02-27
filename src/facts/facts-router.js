@@ -1,16 +1,16 @@
 // Facts Router
 
 // variables
-const { Router, json } = require("express")
-const FactsRouter = Router();
-const jsonBodyParser = json();
-const path = require("path");
+const { Router, json }          = require("express")
+const FactsRouter               = Router();
+const jsonBodyParser            = json();
+const path                      = require("path");
 
 // services
-const { checkForMissingValue } = require("../middleware/check-for-missing-value");
-const { checkFactExists } = require('../middleware/check-if-exists');
-const FactsService = require("./facts-service");
-const uuid4 = require("uuid4");
+const { checkForMissingValue }  = require("../middleware/check-for-missing-value");
+const { checkFactExists }       = require('../middleware/check-if-exists');
+const FactsService              = require("./facts-service");
+const uuid4                     = require("uuid4");
 
 // router
 FactsRouter
