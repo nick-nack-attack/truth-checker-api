@@ -33,13 +33,13 @@ const makeUsers = () => {
             user_id: 1,
             role: 'Admin',
             email: 'admin@dtf.gov',
-            password: 'password'
-        }, 
+            password: 'Password1!'
+        },
         {
             user_id: 2,
             role: 'End-User',
             email: 'end-user@gmail.com',
-            password: 'password'
+            password: 'Password2!'
         }
     ];
 };
@@ -55,7 +55,7 @@ const makeFacts = () => {
             status: 'Pending',
             date_submitted: '2020-06-01T01:55:48.000Z',
             serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62'
-        }, 
+        },
         {
             fact_id: 2,
             title: 'Grass is Orange',
@@ -65,7 +65,7 @@ const makeFacts = () => {
             date_submitted: '2020-06-01T01:55:48.000Z',
             date_under_review: '2020-06-02T01:55:48.000Z',
             serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62'
-        }, 
+        },
         {
             fact_id: 3,
             title: 'Chocolate is sweet',
@@ -76,7 +76,7 @@ const makeFacts = () => {
             date_under_review: '2020-06-02T01:55:48.000Z',
             date_approved: '2020-06-03T01:55:48.000Z',
             serial: '055e7a36-d474-4769-aaab-4e37ae4a6a62'
-        }, 
+        },
         {
             fact_id: 4,
             title: 'The Moon is made of cheese',
@@ -114,17 +114,11 @@ const makeReports = () => {
     ]
 };
 
-<<<<<<< HEAD
 const seedTables = (users, facts, reports) => {
     return testDb.transaction(async trx => {
-=======
-function seedTables(db, users, facts, reports) {
-
-    return db.transaction(async trx => {
->>>>>>> 3a9de68416b8357fb97e288b6b64f04d8ca27472
 
         if (users.length > 0) {
-            const preppedUsers = users.map(user => ({
+            const preppedUsers = users.map((user) => ({
                 ...user,
                 password: bcrypt.hashSync(user.password, 1)
             }));
@@ -150,7 +144,7 @@ function seedTables(db, users, facts, reports) {
                 [reports[reports.length - 1].report_id]
             );
         }
-        
+
     });
 };
 

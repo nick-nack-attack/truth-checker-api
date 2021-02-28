@@ -13,15 +13,16 @@ const UsersService      = require('./users-service');
 // for testing purposes
 UsersRouter
     .route('/')
-    .get(requireAuth, (req, res, next) => {
-      if (req.user.role === 'Admin') {
+    .get((req, res, next) => {
+
+
         return UsersService.getAllUsers()
           .then(listOfUsers => {
               res.json(listOfUsers.map(UsersService.serializeUser))
           })
           .catch(next)
-      }
-      return 'Admin required';
+
+
     })
 
     .post(jsonParser, (req, res, next) => {
@@ -34,7 +35,7 @@ UsersRouter
             .json({
                 error: `Missing ${field} in request body`
             });
-      
+
         const passwordError = UsersService.validatePassword(password);
         if (passwordError) {
             return res
@@ -52,7 +53,7 @@ UsersRouter
                 .json({
                     error: `Email already exists`
                 });
-          
+
           return UsersService.hashPassword(password)
           .then(hashedPassword => {
               const newUser = {

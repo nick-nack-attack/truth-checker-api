@@ -5,9 +5,8 @@ const helpers       = require('./test-helpers');
 const { describe }  = require("mocha");
 const { expect }    = require('chai');
 
-describe.only(`facts endpoints`, () => {
-
-    let db;
+describe(`facts endpoints`, () => {
+    // let db;
 
     // create db schema as JS objects
     const {
@@ -16,8 +15,8 @@ describe.only(`facts endpoints`, () => {
     } = helpers.makeFixtures();
 
     before(`make knex instance`, () => {
-        db = testDb;
-        app.set('db', db);
+        // db = testDb;
+        app.set('db', testDb);
     });
     after(`disconnect from database`, () => { db.destroy() });
     beforeEach(`truncate db and restart idents`, () => { helpers.cleanTables() });
@@ -32,7 +31,7 @@ describe.only(`facts endpoints`, () => {
                     helpers.seedTables(
                         testUsers,
                         [],
-                        []
+                        [],
                     )
                 );
             })
@@ -40,7 +39,7 @@ describe.only(`facts endpoints`, () => {
             it(`responds 200 + empty array`, () => {
                 return (
                     supertest(app
-                        .get(`/api/facts`)                        
+                        .get(`/api/facts`)
                 ))
             });
 
@@ -48,19 +47,20 @@ describe.only(`facts endpoints`, () => {
 
         context(`insert facts`, () => {
 
-            beforeEach(`seed db`, () => 
+            beforeEach(`seed db`, () =>
                 helpers.seedTables(
                     testUsers,
                     testFacts,
-                    []
+                    [],
                 )
             );
 
             it(`responds 200 + all facts`, () => {
                 const expectedFact = helpers.makeExpectedFact(testFacts[0]);
+                console.log(expectedFact)
                     return (
                         supertest(app)
-                            .get(`/api/facts/id/${testFacts[0].fact_id}`)
+                            .get(`/api/facts/id/${expectedFact.fact_id}`)
                             .expect(200, expectedFact)
                     )
 
@@ -71,14 +71,14 @@ describe.only(`facts endpoints`, () => {
     });
 
     describe(`GET /api/facts/id/:fact_id`, () => {
-        
+
         context(`given NO facts`, () => {
 
             beforeEach(`seed db`, () =>
                 helpers.seedTables(
                     testUsers,
                     [],
-                    []
+                    [],
                 )
             );
 
