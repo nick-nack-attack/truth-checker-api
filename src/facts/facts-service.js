@@ -1,22 +1,23 @@
-const xss = require('xss');
-const { format } = require('date-fns');
+const xss           = require('xss');
+const { format }    = require('date-fns');
+const { db }        = require('../database/connect');
 
 const FactsService = {
 
-    deleteFact: (db, fact_id) => {
+    deleteFact: (fact_id) => {
         return db
             .from('facts')
             .where('fact_id', fact_id)
             .delete()
     },
 
-    getAllFacts: (db) => {
+    getAllFacts: () => {
         return db
             .from('facts')
             .select('*')
     },
 
-    getFactById: (db, fact_id) => {
+    getFactById: (fact_id) => {
         return db
             .from('facts')
             .select('*')
@@ -24,7 +25,7 @@ const FactsService = {
             .first()
     },
 
-    insertFact: (db, fact) => {
+    insertFact: (fact) => {
         return db
             .insert(fact)
             .into('facts')
@@ -32,7 +33,7 @@ const FactsService = {
             .then(([returnedFact]) => returnedFact)
     },
 
-    updateFact: (db, fact_id, fields) => {
+    updateFact: (fact_id, fields) => {
         return db
             .from('facts')
             .where('fact_id', fact_id)

@@ -1,5 +1,6 @@
 // Authentication service
 const config = require('../config');
+const { db } = require('../database/connect');
 
 // utils
 const bcrypt = require('bcryptjs');
@@ -26,7 +27,7 @@ const AuthService = {
         );
     },
 
-    getUserWithEmail: (db, email) => {
+    getUserWithEmail: (email) => {
         return db('users')
             .where({ email })
             .first()

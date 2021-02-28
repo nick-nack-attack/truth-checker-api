@@ -1,34 +1,25 @@
-const app = require('../src/app');
-const knex = require('knex');
-const helpers = require('./test-helpers');
-const jwt = require('jsonwebtoken');
-const { expect } = require('chai');
-const supertest = require('supertest');
-const config = require('../src/config');
+const app           = require('../src/server');
+const { testDb }    = require('../src/database/connect');
+
+const helpers       = require('./test-helpers');
+const jwt           = require('jsonwebtoken');
+const { expect }    = require('chai');
+const supertest     = require('supertest');
+const config        = require('../src/config');
 
 describe(`auth endpoints`, () => {
+
     // initialize db
     let db;
     // create fixtures
     const { testUsers } = helpers.makeFixtures();
     const testUser = testUsers[0];
+
     // set up before and after connection and clean up
-    before(`make db connection`, () => {
-        db = knex({
-            client: 'pg',
-            connection: process.env.TEST_DATABASE_URL
-        });
-        app.set('db', db);
-    });
-    after(`disconnect from db`, () => {
-        return db.destroy();
-    });
-    before(`truncate db and restart idents`, () => {
-        return helpers.cleanTables(db);
-    });
-    afterEach(`truncate db and restart idents`, () => {
-        return helpers.cleanTables(db);
-    });
+    before(`make test db knex instance`, () => db = testDb )
+    after(`disconnect from test db`, () =>  db.destroy() );
+    beforeEach(`truncate database and restart idents`, () => helpers.cleanTables(db) );
+    afterEach(`truncate db and restart idents`, () => helpers.cleanTables(db) );
 
     describe(`POST /api/auth/login`, () => {
         // set up users before login

@@ -1,1 +1,3 @@
-ALTER TABLE facts DROP COLUMN "serial";
+ALTER TABLE facts
+    DROP COLUMN "serial"
+    DROP COLUMN "text";

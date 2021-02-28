@@ -1,8 +1,9 @@
-const app = require('../src/app');
-const knex = require('knex');
-const helpers = require('./test-helpers');
-const { expect } = require('chai');
-const supertest = require('supertest');
+const app           = require('../src/server');
+const { testDb }    = require('../src/database/connect');
+
+const helpers       = require('./test-helpers');
+const { expect }    = require('chai');
+const supertest     = require('supertest');
 
 describe(`reports endpoints`, () => {
     // set up db, knex instance, etc for tests

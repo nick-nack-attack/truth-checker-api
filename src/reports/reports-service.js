@@ -1,9 +1,10 @@
 // Reports Service
+const { db } = require('../database/connect');
 
 const ReportsService = {
 
     // get all reported facts
-    getReports: (db) => {
+    getReports: () => {
         return db
             .from('reports AS rpt')
             .select(
@@ -32,7 +33,7 @@ const ReportsService = {
             .groupBy('rpt.report_id', 'fct.fact_id')
     },
 
-    getReportById(db, report_id) {
+    getReportById: (report_id) => {
         return db
             .from('reports')
             .select('*')
@@ -40,20 +41,16 @@ const ReportsService = {
             .first()
     },
 
-    insertReport: (db, report) => {
-        return (
-            db
-                .insert(report)
-                .into('reports')
-                .returning('*')
-                .then(([report]) => report)
-                .then(report =>
-                    ReportsService.getReportById(db, report.report_id)
-                )
-        );
+    insertReport: (report) => {
+        return db
+            .insert(report)
+            .into('reports')
+            .returning('*')
+            .then(([report]) => report)
+            .then(report => ReportsService.getReportById( report.report_id ))
     },
 
-    updateReport: (db, report_id, fields) => {
+    updateReport: (report_id, fields) => {
         return db
             .from('reports')
             .where('report_id', report_id)
