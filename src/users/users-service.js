@@ -12,6 +12,7 @@ const UsersService = {
             .from('users')
             .select('*')
     },
+
     insertUser: (newUser) => {
         return db
             .insert(newUser)
@@ -19,6 +20,7 @@ const UsersService = {
             .returning('*')
             .then(([user]) => user);
     },
+
     validatePassword: (password) => {
         if (password.length < 8) {
             return 'Password must be longer than 8 characters';
@@ -37,24 +39,24 @@ const UsersService = {
         }
         return null;
     },
+
     hashPassword: (pw) => {
         return bcrypt.hash(pw, 12);
     },
+
     hasUserWithEmail: (email) => {
-        console.log('checkingEmail::', email)
         return db('users')
             .where({ email })
             .first()
             .then(user => !!user);
     },
+
     // prevent malicious attacks by form submissions
     serializeUser: (user) => {
         return {
             user_id: user.user_id,
-            role: xss(user.role),
-            email: xss(user.email),
-            password: xss(user.password),
-            date_created: user.date_created
+            email: xss.filterXSS(user.email),
+            date_created: new Date (user.date_created),
         };
     }
 

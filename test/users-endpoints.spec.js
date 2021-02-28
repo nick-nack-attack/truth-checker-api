@@ -6,7 +6,7 @@ const { expect }    = require('chai');
 const supertest     = require('supertest');
 const { describe }  = require("mocha");
 
-describe.only(`user endpoints`, () => {
+describe(`user endpoints`, () => {
 
     // initialize database
     let db = testDb;
@@ -43,7 +43,7 @@ describe.only(`user endpoints`, () => {
         // context 2
         context(`users in db`, () => {
             // set up db
-            beforeEach('seed db', () => helpers.seedTables( db, testUsers, [], [] ))
+            beforeEach('seed db', () => helpers.seedTables( testUsers, [], [] ))
             // run tests
             it(`responds 200 and users`, () => {
                 return (
@@ -60,34 +60,37 @@ describe.only(`user endpoints`, () => {
 
         })
 
-    describe.only(`POST /api/users`, () => {
+    describe(`POST /api/users`, () => {
 
         context(`users ARE in db`, () => {
 
             beforeEach('seed db', () => helpers.seedTables(testUsers, [], [] ))
 
-            const requiredFields = ['role', 'email', 'password'];
+            context(`Something is missing in login credentials`, () => {
+                const requiredFields = ['role', 'email', 'password'];
 
-            requiredFields.forEach(field => {
+                requiredFields.forEach(field => {
 
-                const registerAttemptBody = {
-                    role: 'End-User',
-                    email: 'testuser@email.com',
-                    password: 'password'
-                };
+                    const registerAttemptBody = {
+                        role: 'End-User',
+                        email: 'testuser@email.com',
+                        password: 'password'
+                    };
 
-                it(`responds error 400 and 'Missing ${field} in request body'`, () => {
-                    delete registerAttemptBody[field];
-                    return supertest(app)
-                        .post('/api/users')
-                        .send(registerAttemptBody)
-                        .expect(
-                            400,
-                            { error: `Missing ${field} in request body` }
-                        )
-                })
+                    it(`responds error 400 and 'Missing ${field} in request body'`, () => {
+                        delete registerAttemptBody[field];
+                        return supertest(app)
+                            .post('/api/users')
+                            .send(registerAttemptBody)
+                            .expect(
+                                400,
+                                { error: `Missing ${field} in request body` }
+                            )
+                    })
 
-            });
+                });
+
+            })
 
             it(`responds error 400 + 'Password must be longer than 8 characters'`, () => {
                 const userShortPassword = {
@@ -166,26 +169,35 @@ describe.only(`user endpoints`, () => {
 
             it(`responds code 201 + serialized user + stored bcrypt password`, () => {
                 // create a test user
+
+                const randomNumber = Math.floor((Math.random() * 100) + 1);
+
                 const newUser = {
                     role: "End-User",
-                    email: "end-user-2@gmail.com",
+                    email: `user-${randomNumber}@gmail.com`,
                     password: "A2jackjack!",
                 };
-
-                // const expectedDate = new Date().toLocaleString(
-                //     'en',
-                //     { timeZone: 'UTC' });
-                // const actualDate = new Date(res.body.date_created).toLocaleString(
-                //     'en',
-                //     { timeZone: 'UTC' });
 
                 return supertest(app)
                     .post('/api/users')
                     .send(newUser)
                     .expect(201)
                     .expect((res) => {
-                        console.log(res)
+
+                        const expectedDate = new Date().toLocaleString(
+                            'en',
+                            { timeZone: 'UTC' },
+                        );
+                        const actualDate = new Date(res.body.date_created).toLocaleString(
+                            'en',
+                            { timeZone: 'UTC' },
+                        );
+
+                        expect(res.body.email).to.eql(newUser.email)
                         expect(res.body).to.not.have.property('password')
+                        expect(expectedDate).to.eql(actualDate)
+                        expect(res.headers.location).to.eql(`/api/users/${res.body.user_id}`)
+
                     })
 
 

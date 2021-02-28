@@ -55,7 +55,7 @@ UsersRouter
                 });
 
           return UsersService.hashPassword(password)
-          .then(hashedPassword => {
+          .then((hashedPassword) => {
               const newUser = {
                   role,
                   email,
@@ -64,7 +64,7 @@ UsersRouter
               }
 
               return UsersService.insertUser(newUser)
-              .then(user => {
+              .then((user) => {
                   res
                       .status(201)
                       .location(path.posix.join(req.originalUrl, `/${ user.user_id }`))
