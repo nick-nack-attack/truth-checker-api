@@ -6,31 +6,25 @@ const { expect }    = require('chai');
 const supertest     = require('supertest');
 
 describe(`reports endpoints`, () => {
-    // set up db, knex instance, etc for tests
+
+    // initialize db
     let db;
-    const { 
-        testUsers, 
-        testFacts, 
-        testReports 
+
+    // create fixtures
+    const {
+        testUsers,
+        testFacts,
+        testReports
     } = helpers.makeFixtures();
-    
+
     // run before and after clean-up and set-up
-    before(`make knex instance`, () => {
-        db = knex({
-            client: 'pg',
-            connection: process.env.TEST_DATABASE_URL
-        });
+    before('make knex instance', () => {
+        db = testDb
         app.set('db', db);
-    });
-    after(`disconnect from database`, () => {
-        db.destroy()
-    });
-    beforeEach(`truncate db and restart idents`, () => {
-        helpers.cleanTables(db)
-    });
-    afterEach(`truncate db and restart idents`, () => {
-        helpers.cleanTables(db)
-    });
+    })
+    after(`disconnect from database`, () => db.destroy());
+    beforeEach(`truncate db and restart idents`, () => helpers.cleanTables(db) );
+    afterEach(`truncate db and restart idents`, () => helpers.cleanTables(db) );
 
     describe(`GET /api/reports`, () => {
 
@@ -75,7 +69,7 @@ describe(`reports endpoints`, () => {
                     supertest(app)
                         .get(`/api/reports`)
                         .expect(200)
-                )        
+                )
 
             });
 
@@ -175,8 +169,8 @@ describe(`reports endpoints`, () => {
         context(`given fact does not exist`, () => {
 
             it(`responds 404`, () => {
-                const factToReport = { 
-                    fact_id: 1000 
+                const factToReport = {
+                    fact_id: 1000
                 };
                 return (
                     supertest(app)
@@ -208,8 +202,8 @@ describe(`reports endpoints`, () => {
             });
 
             it(`responds 201 and new report`, () => {
-                const factToReport = { 
-                    fact_id: 1 
+                const factToReport = {
+                    fact_id: 1
                 };
                 return (
                     supertest(app)

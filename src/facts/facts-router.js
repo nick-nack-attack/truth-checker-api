@@ -77,19 +77,9 @@ FactsRouter
         date_not_true
       } = req.body;
 
-      // set new status if a date has been submitted
-      const statusChange = date_not_true
-          ? 'Not true'
-          : date_approved
-              ? 'Approved'
-              : date_under_review
-                  ? 'Under Review'
-                  : 'Pending';
-
       const fact = {
         title,
         user_id,
-        status: statusChange,
         date_submitted,
         date_under_review,
         date_approved,
@@ -105,7 +95,6 @@ FactsRouter
         }
       }
 
-
       // set how many values there are left
       const numOfValues = Object.values(fact).filter(Boolean).length;
 
@@ -116,15 +105,29 @@ FactsRouter
                 .status(400)
                 .json({
                   error: {
-                    message: `Request body content requires 'title'`
+                    message: `Must require at least one change`
                   }
                 })
         )
       }
 
+        // set new status if a date has been submitted
+        const statusChange = date_not_true
+            ? 'Not true'
+            : date_approved
+                ? 'Approved'
+                : date_under_review
+                    ? 'Under Review'
+                    : 'Pending';
+
+        const patchedFact = {
+          ...fact,
+          status: statusChange,
+        };
+
       FactsService.updateFact(
           fact_id,
-          fact
+          patchedFact
       )
           .then(() => {
             FactsService.getFactById(fact_id)

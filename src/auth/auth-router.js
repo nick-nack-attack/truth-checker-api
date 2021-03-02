@@ -23,7 +23,7 @@ AuthRouter
                     })
             }
         }
-    
+
         AuthService.getUserWithEmail(loginUser.email)
             .then(dbUser => {
                 if (!dbUser) {
@@ -38,7 +38,7 @@ AuthRouter
                     loginUser.password,
                     dbUser.password
                 )
-                .then(result => {
+                .then((result) => {
                     if (!result) {
                         // if request body password and db password don't match, return error
                         return res
@@ -59,13 +59,13 @@ AuthRouter
                     } catch (error) {
                         return res
                             .sendStatus(500)
-                            .json({ 
-                                error: `Couldn't create JWTToken` 
+                            .json({
+                                error: `Couldn't create JWTToken`
                             })
                     }
                 })
             })
-            
+
     });
 
 AuthRouter
@@ -80,8 +80,8 @@ AuthRouter
             })
             .catch(err => {
                 res.sendStatus(500)
-                .json({ 
-                    error: `Couldn't create JWTToken`, err 
+                .json({
+                    error: `Couldn't create JWTToken`, err
                 })
             next();
             })
