@@ -7,7 +7,7 @@ const checkFactExists = async (req, res, next) => {
         const fact = await FactsService.getFactById( req.params.fact_id );
         if (!fact) {
             return res
-                .status(400)
+                .status(404)
                 .json({
                     error: `Fact doesn't exist`
                 })
@@ -25,7 +25,7 @@ const checkReportExists = async (req, res, next) => {
         const report = await ReportsService.getReportById( req.params.report_id );
         if (!report) {
             return res
-                .status(400)
+                .status(404)
                 .json({
                     error: `Report doesn't exist`
                 })

@@ -11,27 +11,30 @@ describe(`auth endpoints`, () => {
 
     // initialize db
     let db;
+
     // create fixtures
     const { testUsers } = helpers.makeFixtures();
     const testUser = testUsers[0];
 
     // set up before and after connection and clean up
-    before(`make test db knex instance`, () => db = testDb )
+    before('make knex instance', () => {
+        db = testDb
+        app.set('db', db);
+    })
     after(`disconnect from test db`, () =>  db.destroy() );
-    beforeEach(`truncate database and restart idents`, () => helpers.cleanTables(db) );
-    afterEach(`truncate db and restart idents`, () => helpers.cleanTables(db) );
+    beforeEach(`truncate database and restart idents`, () => helpers.cleanTables() );
+    afterEach(`truncate db and restart idents`, () => helpers.cleanTables() );
 
     describe(`POST /api/auth/login`, () => {
         // set up users before login
         beforeEach(`insert users`, () => {
             return (
                 helpers.seedTables(
-                    db,
                     testUsers,
                     [],
-                    []
+                    [],
                 )
-            );  
+            );
         });
 
         const requiredFields = ['email', 'password'];
@@ -84,7 +87,7 @@ describe(`auth endpoints`, () => {
         it(`responds 200 and JWT auth token using secret when valid creds`, () => {
             const validUserCreds = {
                 email: testUser.email,
-                password: testUser.password
+                password: testUser.password,
             };
             const expectedToken = jwt.sign(
                 { user_id: testUser.user_id }, // payload
@@ -94,11 +97,12 @@ describe(`auth endpoints`, () => {
                     algorithm: 'HS256'
                 }
             );
+
             return (
                 supertest(app)
                     .post(`/api/auth/login`)
                     .send(validUserCreds)
-                    .expect(200, {
+                    .expect(200,{
                         authToken: expectedToken,
                         user_id: testUser.user_id
                     })

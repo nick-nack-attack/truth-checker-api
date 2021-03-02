@@ -7,5 +7,5 @@ describe('server app tests', () => {
         .get('/')
         .expect(200, 'This is the Department of Truth and Facts Api Service')
     });
-    
+
 });

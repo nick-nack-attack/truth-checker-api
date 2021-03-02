@@ -2,11 +2,11 @@
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { testDb } = require("../src/database/connect");
+const { db } = require('../src/database/connect');
 
 // Truncate all tables and restart identities for database
 const cleanTables = () => {
-    return testDb.transaction(trx =>
+    return db.transaction(trx =>
         trx.raw(
             `TRUNCATE
                 users,
@@ -33,13 +33,13 @@ const makeUsers = () => {
             user_id: 1,
             role: 'Admin',
             email: 'admin@dtf.gov',
-            password: 'Password1!'
+            password: 'Password1!',
         },
         {
             user_id: 2,
             role: 'End-User',
             email: 'end-user@gmail.com',
-            password: 'Password2!'
+            password: 'Password2!',
         }
     ];
 };
@@ -115,7 +115,7 @@ const makeReports = () => {
 };
 
 const seedTables = (users, facts, reports) => {
-    return testDb.transaction(async trx => {
+    return db.transaction(async trx => {
 
         if (users.length > 0) {
             const preppedUsers = users.map((user) => ({
@@ -148,7 +148,7 @@ const seedTables = (users, facts, reports) => {
     });
 };
 
-const makeExpectedFact = fact => {
+const makeExpectedFact = (fact) => {
     return {
         fact_id: fact.fact_id,
         title: fact.title,
@@ -163,7 +163,7 @@ const makeExpectedFact = fact => {
     };
 };
 
-const makeExpectedReport = report => {
+const makeExpectedReport = (report) => {
     return {
         report_id: report.report_id,
         fact_id: report.fact_id,
@@ -172,7 +172,7 @@ const makeExpectedReport = report => {
     };
 };
 
-const makeMaliciousFact = person => {
+const makeMaliciousFact = (person) => {
     const maliciousFact = {
         title: 'Naughty naughty very naughty <script>alert("xss");</script>',
         text: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,

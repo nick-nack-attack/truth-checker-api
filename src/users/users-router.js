@@ -17,7 +17,7 @@ UsersRouter
 
 
         return UsersService.getAllUsers()
-          .then(listOfUsers => {
+          .then((listOfUsers) => {
               res.json(listOfUsers.map(UsersService.serializeUser))
           })
           .catch(next)
@@ -26,9 +26,9 @@ UsersRouter
     })
 
     .post(jsonParser, (req, res, next) => {
-      const { role, email, password } = req.body;
+      const { email, password } = req.body;
 
-      for (const field of ['role', 'email', 'password'])
+      for (const field of ['email', 'password'])
         if (!req.body[field])
         return res
             .status(400)
@@ -46,7 +46,7 @@ UsersRouter
         }
 
         UsersService.hasUserWithEmail(email)
-        .then(hasUserWithEmail => {
+        .then((hasUserWithEmail) => {
           if (hasUserWithEmail)
             return res
                 .status(400)
@@ -57,7 +57,7 @@ UsersRouter
           return UsersService.hashPassword(password)
           .then((hashedPassword) => {
               const newUser = {
-                  role,
+                  role: 'End-User',
                   email,
                   password: hashedPassword,
                   date_created: 'now()',
