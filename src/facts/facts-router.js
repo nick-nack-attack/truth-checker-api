@@ -18,7 +18,7 @@ FactsRouter
     .get((req, res, next) => {
       FactsService
           .getAllFacts()
-          .then(fact => {
+          .then((fact) => {
             res.json(fact.map(FactsService.serializeFact))
           })
           .catch(next)

@@ -1,11 +1,9 @@
-const app           = require('../src/server');
-
-const helpers       = require('./test-helpers');
-const { expect }    = require('chai');
-const supertest     = require('supertest');
-const knex = require("knex");
-const { testDb } = require("../src/database/connect");
-const { describe }  = require("mocha");
+const app = require('../src/server');
+const helpers = require('./test-helpers');
+const {expect} = require('chai');
+const supertest = require('supertest');
+const {testDb} = require("../src/database/connect");
+const {describe} = require("mocha");
 
 describe(`user endpoints`, () => {
 
@@ -13,7 +11,7 @@ describe(`user endpoints`, () => {
     let db;
 
     // create fixtures
-    const { testUsers, testFacts } = helpers.makeFixtures();
+    const {testUsers} = helpers.makeFixtures();
     const testUser = testUsers[0];
 
     // make knex instance
@@ -21,9 +19,9 @@ describe(`user endpoints`, () => {
         db = testDb
         app.set('db', db);
     })
-    after(`disconnect from test db`, () =>  db.destroy() );
-    beforeEach(`truncate database and restart idents`, () => helpers.cleanTables() );
-    afterEach(`truncate db and restart idents`, () => helpers.cleanTables() );
+    after(`disconnect from test db`, () => db.destroy());
+    beforeEach(`truncate database and restart idents`, () => helpers.cleanTables());
+    afterEach(`truncate db and restart idents`, () => helpers.cleanTables());
 
     describe(`GET /api/users`, () => {
         // context 1
@@ -47,7 +45,7 @@ describe(`user endpoints`, () => {
         // context 2
         context(`users in db`, () => {
             // set up db
-            beforeEach('seed db', () => helpers.seedTables( testUsers, [], [] ))
+            beforeEach('seed db', () => helpers.seedTables(testUsers, [], []))
             // run tests
             it(`responds 200 and users`, () => {
                 return (
@@ -60,15 +58,15 @@ describe(`user endpoints`, () => {
                 )
             });
 
-            })
-
         })
+
+    })
 
     describe(`POST /api/users`, () => {
 
         context(`users ARE in db`, () => {
 
-            beforeEach('seed db', () => helpers.seedTables(testUsers, [], [] ))
+            beforeEach('seed db', () => helpers.seedTables(testUsers, [], []))
 
             context(`Something is missing in login credentials`, () => {
                 const requiredFields = ['email', 'password'];
@@ -87,7 +85,7 @@ describe(`user endpoints`, () => {
                             .send(registerAttemptBody)
                             .expect(
                                 400,
-                                { error: `Missing ${field} in request body` }
+                                {error: `Missing ${field} in request body`}
                             )
                     })
 
@@ -106,7 +104,7 @@ describe(`user endpoints`, () => {
                     .send(userShortPassword)
                     .expect(
                         400,
-                        { error: 'Password must be longer than 8 characters' }
+                        {error: 'Password must be longer than 8 characters'}
                     )
             })
 
@@ -121,7 +119,7 @@ describe(`user endpoints`, () => {
                     .send(userLongPassword)
                     .expect(
                         400,
-                        { error: 'Password cannot be longer than 72 characters' }
+                        {error: 'Password cannot be longer than 72 characters'}
                     )
             })
 
@@ -136,7 +134,7 @@ describe(`user endpoints`, () => {
                     .send(userPasswordStartsWithSpace)
                     .expect(
                         400,
-                        { error: 'Password cannot start with a space' }
+                        {error: 'Password cannot start with a space'}
                     )
             })
 
@@ -151,7 +149,7 @@ describe(`user endpoints`, () => {
                     .send(userPasswordEndsWithSpace)
                     .expect(
                         400,
-                        { error: 'Password cannot end with a space' }
+                        {error: 'Password cannot end with a space'}
                     )
             })
 
@@ -165,7 +163,7 @@ describe(`user endpoints`, () => {
                     .send(userExists)
                     .expect(
                         400,
-                        { error: 'Email already exists' }
+                        {error: 'Email already exists'}
                     )
             })
 
@@ -181,14 +179,13 @@ describe(`user endpoints`, () => {
                     .send(newUser)
                     .expect(201)
                     .expect((res) => {
-
                         const expectedDate = new Date().toLocaleString(
                             'en',
-                            { timeZone: 'UTC' },
+                            {timeZone: 'UTC'},
                         );
                         const actualDate = new Date(res.body.date_created).toLocaleString(
                             'en',
-                            { timeZone: 'UTC' },
+                            {timeZone: 'UTC'},
                         );
 
                         expect(res.body.email).to.eql(newUser.email)
@@ -196,53 +193,13 @@ describe(`user endpoints`, () => {
                         expect(expectedDate).to.eql(actualDate)
                         expect(res.headers.location).to.eql(`/api/users/${res.body.user_id}`)
 
+                        return supertest(app)
+                            .get('/api/users')
+                            .then((res) => {
+                                expect(res.body[2]).to.include({email: `newUser@email.com`})
+                            })
                     })
-
-
-                // expect the new user is returned
-                // return supertest(app)
-                //     .post(`/api/users`)
-                //     .send(newUser)
-                //     .expect(201)
-                //     .expect(res => {
-                //         expect(res.body).to.have.property(
-                //             'user_id',
-                //             'gender',
-                //             'full_name',
-                //             'address',
-                //             'latitude',
-                //             'longitude',
-                //             'uuid',
-                //             'inbox',
-                //             'date_of_birth',
-                //             'phone',
-                //             'ssn',
-                //             'photo_url'
-                //         )
-                //         expect(res.body.email).to.eql(newUser.email)
-                //         expect(res.body).to.not.have.property('password')
-                //         expect(res.headers.location).to.eql(`/api/users/${res.body.user_id}`)
-                //         expect(expectedDate).to.eql(actualDate)
-                //     })
-                //     .expect(res => {
-                //         return db
-                //             .from('users')
-                //             .select('*')
-                //             .where({user_id: res.body.user_id})
-                //             .first()
-                //             .then(row => {
-                //                 expect(row.email).to.eql(newUser.email)
-                //                 expect(expectedDate).to.eql(actualDate)
-                //                 return bcrypt.compare(
-                //                     newUser.password,
-                //                     row.password
-                //                 )
-                //             })
-                //             .then(compareMatchedUsers => expect(compareMatchedUsers).to.be.true)
-                //     })
-
             })
-
         })
     });
 })

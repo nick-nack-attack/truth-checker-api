@@ -1,6 +1,7 @@
 // error handler
 require('dotenv').config();
 const { NODE_ENV } = require('../config');
+const logger = require('./logger');
 
 const errorHandler = (error, req, res, next) => {
     let response;
@@ -9,6 +10,7 @@ const errorHandler = (error, req, res, next) => {
     } else {
         console.error('SOMETHING WENT WRONG!', error)
         response = { message: error.message, error }
+        logger.error(error.message)
     }
     res.status(500).json(response);
 };
