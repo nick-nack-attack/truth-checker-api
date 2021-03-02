@@ -33,10 +33,9 @@ describe(`reports endpoints`, () => {
             beforeEach('seed db', () => {
                 return (
                     helpers.seedTables(
-                        db,
                         testUsers,
                         testFacts,
-                        []
+                        [],
                     )
                 );
             });
@@ -56,10 +55,9 @@ describe(`reports endpoints`, () => {
             beforeEach('seed db', () => {
                 return (
                     helpers.seedTables(
-                        db,
                         testUsers,
                         testFacts,
-                        testReports
+                        testReports,
                     )
                 );
             });
@@ -82,10 +80,9 @@ describe(`reports endpoints`, () => {
         beforeEach(`seed db`, () => {
             return (
                 helpers.seedTables(
-                    db,
                     testUsers,
                     testFacts,
-                    testReports
+                    testReports,
                 )
             );
         });
@@ -113,15 +110,13 @@ describe(`reports endpoints`, () => {
             before(`seed db`, () => {
                 return (
                     helpers.seedTables(
-                        db,
                         testUsers,
                         testFacts,
-                        testReports
+                        testReports,
                     )
                 );
             });
-            // try to seed the db here... it doesn't appear like this loop is seeding the right info
-            // *shrugs* No idea why the beforeEach wasn't firing. Maybe it only loops per context you have or something
+
             it(`responds 200 and report is updated`, () => {
                 const report_id = 1;
                 const updatedReport = {
@@ -158,10 +153,9 @@ describe(`reports endpoints`, () => {
         beforeEach(`seed db`, () => {
             return (
                 helpers.seedTables(
-                    db,
                     testUsers,
                     testFacts,
-                    testReports
+                    testReports,
                 )
             );
         });

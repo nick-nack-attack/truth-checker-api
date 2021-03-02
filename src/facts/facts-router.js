@@ -53,7 +53,7 @@ FactsRouter
     })
     .delete((req, res, next) => {
 
-      const {fact_id} = req.params;
+      const { fact_id } = req.params;
 
       FactsService
           .deleteFact(fact_id)
@@ -135,7 +135,7 @@ FactsRouter
                   return res.status(201).json(fact)
                 })
               .catch((err) => {
-                console.log('Get Fact failed:', err)
+                console.log('Get Fact failed', err)
               })
           })
           .catch((err) => {

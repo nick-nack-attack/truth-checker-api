@@ -71,14 +71,13 @@ describe(`user endpoints`, () => {
             beforeEach('seed db', () => helpers.seedTables(testUsers, [], [] ))
 
             context(`Something is missing in login credentials`, () => {
-                const requiredFields = ['role', 'email', 'password'];
+                const requiredFields = ['email', 'password'];
 
-                requiredFields.forEach(field => {
+                requiredFields.forEach((field) => {
 
                     const registerAttemptBody = {
-                        role: 'End-User',
                         email: 'testuser@email.com',
-                        password: 'password'
+                        password: 'password',
                     };
 
                     it(`responds error 400 and 'Missing ${field} in request body'`, () => {
@@ -161,25 +160,19 @@ describe(`user endpoints`, () => {
                     email: testUser.email,
                     password: testUser.password
                 };
-                console.log(userExists)
                 return supertest(app)
-                    .get('/api/users')
-                    .expect((res) => console.log(res.body))
-                    // .send(userExists)
-                    // .expect(
-                    //     400,
-                    //     { error: 'Email already exists' }
-                    // )
+                    .post('/api/users')
+                    .send(userExists)
+                    .expect(
+                        400,
+                        { error: 'Email already exists' }
+                    )
             })
 
             it(`responds code 201 + serialized user + stored bcrypt password`, () => {
                 // create a test user
-
-                const randomNumber = Math.floor((Math.random() * 100) + 1);
-
                 const newUser = {
-                    role: "End-User",
-                    email: `user-${randomNumber}@gmail.com`,
+                    email: `newUser@email.com`,
                     password: "A2jackjack!",
                 };
 

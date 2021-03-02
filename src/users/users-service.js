@@ -1,23 +1,20 @@
 // Users Service
 const xss       = require('xss');
 const bcrypt    = require('bcryptjs');
-const { NODE_ENV } = require("../config");
-const { db, testDb }    = require('../database/connect');
+const { db }    = require('../database/connect');
 
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/;
-
-let db_instance = db;
 
 const UsersService = {
 
     getAllUsers: () => {
-        return db_instance
+        return db
             .from('users')
             .select('*')
     },
 
     insertUser: (newUser) => {
-        return db_instance
+        return db
             .insert(newUser)
             .into('users')
             .returning('*')
@@ -48,7 +45,7 @@ const UsersService = {
     },
 
     hasUserWithEmail: (email) => {
-        return db_instance('users')
+        return db('users')
             .where({ email })
             .first()
             .then(user => !!user);

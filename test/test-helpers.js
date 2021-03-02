@@ -33,7 +33,7 @@ const makeUsers = () => {
             user_id: 1,
             role: 'Admin',
             email: 'admin@dtf.gov',
-            password: 'password',
+            password: 'Password1!',
         },
         {
             user_id: 2,

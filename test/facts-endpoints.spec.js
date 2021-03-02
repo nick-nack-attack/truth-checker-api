@@ -17,7 +17,7 @@ describe(`facts endpoints`, () => {
     before('make knex instance', () => {
         db = testDb
         app.set('db', db);
-    })
+    });
     after(`disconnect from test db`, () =>  db.destroy() );
     beforeEach(`truncate db and restart idents`, () => { helpers.cleanTables() });
     afterEach(`truncate db and restart idents`, () => { helpers.cleanTables() });
@@ -80,11 +80,11 @@ describe(`facts endpoints`, () => {
                 )
             );
 
-            it(`responds with 400`, () => {
+            it(`responds with 404`, () => {
                 return (
                     supertest(app)
                         .get(`/api/facts/id/1`)
-                        .expect(400)
+                        .expect(404)
                 );
             });
 
@@ -101,14 +101,13 @@ describe(`facts endpoints`, () => {
             );
 
             it(`responds 200 + all facts`, function() {
-
-                const fact_id = 1;
-                const expectedFact = helpers.makeExpectedFact(testFacts[1]);
                 return (
                     supertest(app)
-                        .get(`/api/facts`) // it passes on .get(`/api/facts/${fact_id}`) but that's wrong route
-                        .expect((res) => console.log(res.body))
-                        // .expect(200, expectedFact)
+                        .get(`/api/facts`)
+                        .expect(200)
+                        .expect((res) => {
+                            expect(res.body.length).to.eql(testFacts.length)
+                        })
                 );
             });
 
@@ -204,9 +203,9 @@ describe(`facts endpoints`, () => {
             beforeEach(`seed db`, () => {
                 return (
                     helpers.seedTables(
+                        testUsers,
                         [],
                         [],
-                        []
                     )
                 );
             });
@@ -236,7 +235,7 @@ describe(`facts endpoints`, () => {
                 );
             });
 
-            it(`responds 404 + person is deleted`, () => {
+            it(`responds 204 + fact is deleted`, () => {
                 const fact_id = 1;
                 return (
                     supertest(app)
