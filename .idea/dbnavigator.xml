@@ -26,12 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="31e5b283-ed49-4996-8d8b-91f32f5a9260">
-        <schema name="pg_catalog" object-types="function" />
-        <schema name="public" object-types="function, view, table, sequence" />
-      </connection>
-      <connection connection-id="c2f96c16-2950-4447-94b2-524844340d9b">
-        <schema name="pg_catalog" object-types="function, view, table" />
-        <schema name="public" object-types="function, view, table" />
+        <schema name="public" object-types="view, table" />
       </connection>
     </loaded-nodes>
   </component>
@@ -40,7 +35,7 @@
       <console name="Connection" type="STANDARD" schema="" session="Main"><![CDATA[SELECT * FROM facts;]]></console>
     </connection>
     <connection id="c2f96c16-2950-4447-94b2-524844340d9b">
-      <console name="Connection 1" type="STANDARD" schema="" session="Main"><![CDATA[SELECT * FROM facts;]]></console>
+      <console name="Staging" type="STANDARD" schema="" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
