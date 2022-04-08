@@ -1,13 +1,14 @@
 // handles connecting to the database
 
 // utilities
-const { NODE_ENV, DATABASE_URL, TEST_DATABASE_URL }     = require('../config');
-const knex                                              = require('knex');
+const { NODE_ENV, DATABASE_URL, TEST_DATABASE_URL } = require('../config');
+const knex = require('knex');
 
 // database
 const db = knex({
     client: 'pg',
     connection: NODE_ENV === 'test' ? TEST_DATABASE_URL : DATABASE_URL,
+    ssl: true
 });
 
 const testDb = knex({
