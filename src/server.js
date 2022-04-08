@@ -7,7 +7,7 @@ const express = require('express');
 const app     = express();
 
 // utilities
-const errorHandler = require('./middleware/error-handler');
+// const errorHandler = require('./middleware/error-handler');
 
 // configuration
 const { NODE_ENV, PORT }  = require('./config');
@@ -23,7 +23,7 @@ const helmet = require('helmet');
 // const app = express(); // const app = require('./app');
 
 // initialize the middleware
-app.use(errorHandler);
+// app.use(errorHandler);
 app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
